@@ -1,6 +1,4 @@
-import { Key, Keyboard } from 'suchibot';
 import { BoolState, IBoolState } from '../../shared/utils/boolState';
-import { IButton } from '../wrapper/button';
 import { IPhysicalButton } from '../wrapper/physicalButton';
 
 type ToggleStateByTapProps = {

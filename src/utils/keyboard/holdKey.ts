@@ -1,27 +1,22 @@
 import { IPhysicalButton } from "../wrapper/physicalButton";
+import { KeyByKeyProps } from "./types";
+import { doc } from "./doc";
+import { wrapToScriptWithDoc } from "./scriptWithDoc";
 
-export const holdKey = (
-  trigger: IPhysicalButton,
-  key: IPhysicalButton,
-) => {
-  trigger.onToggleEnabled(() => {
-    key.hold();
+export const holdKey = ({
+  when,
+  then
+}: KeyByKeyProps<IPhysicalButton, IPhysicalButton>) => {
+  return when.onToggleEnabled(() => {
+    then.hold();
   }, {
     onDisable: () => {
-      key.release();
+      then.release();
     }
   })
-
-  // let isHold = false;
-
-  // trigger.onDown(() => {
-  //   if(isHold) {
-  //     key.release();
-  //     isHold = false;
-  //     return;
-  //   }
-
-  //   key.hold();
-  //   isHold = true;
-  // })
 }
+
+export const getHoldKey = wrapToScriptWithDoc(
+  holdKey, {
+  getDoc: ps => doc.holdKey(ps),
+});

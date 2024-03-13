@@ -1,3 +1,5 @@
+import { force } from "./operators";
+
 export interface IStream<T> {
     map<V>(mapper: (value: T, index: number) => V) : IStream<V>;
     filter(predicate: (value: T, index: number) => boolean) : IStream<T>;

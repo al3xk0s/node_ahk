@@ -9,7 +9,6 @@ type BasicWhileNeedProps = {
 } & WhilePredicateProps;
 
 type WhileNeedProps = BasicWhileNeedProps & WhileAsyncProps;
-type WhileNeedSyncProps = BasicWhileNeedProps;
 
 const _delay = 100;
 
@@ -22,6 +21,24 @@ export const whileNeed = async ({
 
     while(needContinue(i)) {
         execute();
+        await sleep(delayMs);
+        i++;
+    }
+}
+
+type WhileNeedAsyncProps = {
+    execute: () => Promise<any>;
+} & BasicWhileNeedProps & WhileAsyncProps;
+
+export const whileNeedAsync = async ({
+    needContinue,
+    execute,
+    delayMs = _delay,
+}: WhileNeedAsyncProps) => {
+    let i = 1;
+
+    while(needContinue(i)) {
+        await execute();
         await sleep(delayMs);
         i++;
     }

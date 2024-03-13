@@ -37,13 +37,17 @@ export const Observable = <T>() : IObservable<T> => {
 
 export interface IDisposeWrapper extends IDisposable {
     addDisposer(disposer: Disposer) : void;
+    addDisposers(disposer: Disposer[]) : void;
 }
 
 export const DisposeWrapper = () : IDisposeWrapper => {
     let disposers : Disposer[] = [];
 
+    const addDisposer = (d: Disposer) => disposers.push(d);
+
     return {
-        addDisposer: (d) => disposers.push(d),
+        addDisposer,
+        addDisposers: (ds) => ds.forEach(addDisposer),
         dispose: () => disposers = [],
     }
 }

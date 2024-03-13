@@ -1,28 +1,37 @@
 import { Key } from "suchibot";
 import { PhysicalKeyboardButton } from "../../utils/wrapper/physicalButton";
-import { holdKey } from "../../utils/keyboard/holdKey";
-import { tickKey } from "../../utils/keyboard/tickKey";
-import { scrollScripts } from "./scrollScripts";
-import { shifterScript, sixShifterPairs } from "./shifterScripts";
-import { tapKey } from "../../utils/keyboard/tapKey";
+import { getTickKey } from "../../utils/keyboard/tickKey";
+import { getScrollScripts } from "./scrollScripts";
+import { getShifterScript, sixShifterPairs } from "./shifterScripts";
+import { getTapKey } from "../../utils/keyboard/tapKey";
 import { ScrollDownAsButton, ScrollUpAsButton } from "../../utils/wrapper/scrollAsButton";
 
-const main = () => {
-  scrollScripts({
-    scrollUpToggle: PhysicalKeyboardButton(Key.THREE),
-    scrollDownToggle: PhysicalKeyboardButton(Key.FOUR),
-    triggerButton: PhysicalKeyboardButton(Key.CAPS_LOCK),
-    delayMs: 5,
-    scrollStep: 100,
-  });
+import '../../extensions/extensions';
+import { getHoldKey } from "../../utils/keyboard/holdKey";
+import { getCommonScripts } from "./commonScripts";
+import { doc } from "../../utils/keyboard/doc";
+import { execScripts } from "../../utils/keyboard/scriptWithDoc";
 
-  shifterScript(PhysicalKeyboardButton(Key.NUMPAD_ADD), sixShifterPairs);
-  holdKey(PhysicalKeyboardButton(Key.HOME), PhysicalKeyboardButton(Key.W));
-  holdKey(PhysicalKeyboardButton(Key.PAGE_UP), PhysicalKeyboardButton(Key.LEFT_SHIFT));
-  holdKey(PhysicalKeyboardButton(Key.PAGE_DOWN), PhysicalKeyboardButton(Key.LEFT_CONTROL));
-  tickKey(PhysicalKeyboardButton(Key.END), PhysicalKeyboardButton(Key.N));
-  tapKey(PhysicalKeyboardButton(Key.UP), ScrollUpAsButton());
-  tapKey(PhysicalKeyboardButton(Key.DOWN), ScrollDownAsButton());
+const main = () => {
+  execScripts([
+    getScrollScripts({
+      scrollUpToggle: PhysicalKeyboardButton(Key.THREE),
+      scrollDownToggle: PhysicalKeyboardButton(Key.FOUR),
+      triggerButton: PhysicalKeyboardButton(Key.CAPS_LOCK),
+      delayMs: 5,
+      scrollStep: 100,
+    }),
+
+    getShifterScript(PhysicalKeyboardButton(Key.NUMPAD_ADD), sixShifterPairs),
+
+    getCommonScripts(),
+
+    getHoldKey({when: PhysicalKeyboardButton(Key.PAGE_DOWN), then: PhysicalKeyboardButton(Key.LEFT_CONTROL)}),
+
+    getTapKey({when: PhysicalKeyboardButton(Key.UP), then: ScrollUpAsButton()}),
+
+    getTapKey({when: PhysicalKeyboardButton(Key.DOWN),then: ScrollDownAsButton()}),
+  ]);
 }
 
 main();

@@ -1,6 +1,9 @@
 import { Key } from "suchibot";
 import { toggleStateByTap } from "../../utils/keyboard/toggleStateByTap";
 import { IPhysicalButton, PhysicalKeyboardButton } from "../../utils/wrapper/physicalButton"
+import { doc } from "../../utils/keyboard/doc";
+import { ScriptWithDoc, wrapToScriptWithDoc } from "../../utils/keyboard/scriptWithDoc";
+import { DisposeWrapper } from "../../shared/utils/observable";
 
 export interface IShifterKey {
     trigger: IPhysicalButton;
@@ -24,25 +27,44 @@ export const shifterScript = (toggle: IPhysicalButton, pairs: KeyGearPair[]) => 
     const isEnabled = toggleStateByTap({key: toggle});
 
     const map = new Map<Gear, KeyGearPair>();
-    for(const pair of pairs) {
+    for (const pair of pairs) {
         map.set(pair.gear, pair);
     }
 
     let keyGearPair = map.get(Gear.neutral);
 
-    isEnabled.listen((value) => !value && keyGearPair?.target.release());
+    const dw = DisposeWrapper();
 
-    for(const pair of map.values()) {
-        pair.trigger.onDown(() => {            
-            if(!isEnabled.value) return;
-            
+    dw.addDisposer(
+        isEnabled.listen((value) => !value && keyGearPair?.target.release())
+    );
+
+    for (const pair of map.values()) {
+        const ls = pair.trigger.onDown(() => {
+            if (!isEnabled.value) return;
+
             keyGearPair?.target.release();
             pair.target.hold();
             keyGearPair = pair;
             console.log(`Shifter turn ${Gear[keyGearPair.gear]}`)
-        })
+        });
+
+        dw.addDisposer(ls.stop);
     }
+
+    return { stop: dw.dispose }
 }
+
+export const getShifterScript = wrapToScriptWithDoc(
+    shifterScript, {
+    getDoc: (toggle, pairs) => `When ${doc.activate(toggle)}, then shifter works (${pairsToString(pairs)})`,
+});
+
+
+const pairToString = (pair: KeyGearPair) =>
+    `${Gear[pair.gear]}: ${pair.trigger.toString()} -> ${pair.target.toString()}`;
+
+const pairsToString = (pairs: KeyGearPair[]) => pairs.map(pairToString).join(', ');
 
 export const fourShifterPairs = [
     {

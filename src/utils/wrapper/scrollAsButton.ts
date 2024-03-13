@@ -30,7 +30,8 @@ export const ScrollAsButton = ({step = _defaultStep, direction}: ScrollAsButtonP
         step,
         direction,
         tap,
-        ..._commonButtonExt(tap),        
+        ..._commonButtonExt(tap),
+        toString: () => `${ScrollDirection[direction]} (scroll)`
     }
 }
 

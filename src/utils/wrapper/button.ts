@@ -20,7 +20,8 @@ interface IButtonExtentions {
 }
 
 export interface IButton extends IButtonExtentions {
-    tap() : void;    
+    tap() : void;
+    toString() : string;
 }
 
 export const _commonButtonExt = (tap: () => void) : IButtonExtentions => {

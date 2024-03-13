@@ -9,9 +9,20 @@ export type ToggleEnabledHandler = (state: IBoolState, modifiers: KeyboardModifi
 
 interface IPhysicalButtonExt {
     onToggleEnabled(handler: ToggleEnabledHandler, options?: ToggleEnabledOptions) : Listener;
+    holdTimed(holdTime: number) : Promise<void>;
 }
 
-const _physicalButtonExt = (onDown: (h: Handler) => Listener) : IPhysicalButtonExt => {
+type CreatePhysicalButtonExtProps = {
+    onDown: (h: Handler) => Listener;
+    hold: () => void;
+    release: () => void;
+}
+
+const _physicalButtonExt = ({
+    onDown,
+    hold,
+    release
+}: CreatePhysicalButtonExtProps) : IPhysicalButtonExt => {
     return {
         onToggleEnabled: (handler, {initialEnabled = false, onDisable} = {}) => {
             const state = BoolState(initialEnabled);
@@ -21,6 +32,11 @@ const _physicalButtonExt = (onDown: (h: Handler) => Listener) : IPhysicalButtonE
                 if(state.isEnabled) return handler(state, m);
                 if(onDisable != null) return onDisable(state, m);
             });
+        },
+        holdTimed: async (time) => {
+            hold();
+            await Promise.delayed(time);
+            release();
         }
     }
 }
@@ -48,18 +64,22 @@ export const PhysicalKeyboardButton = (key: Key) : IKeyboardButton => {
     const tap = () => Keyboard.tap(key);
     const onDown = (h: Handler) => Keyboard.onDown(key, (ev) => h(ev.modifierKeys));
 
+    const hold = () => Keyboard.hold(key);
+    const release = () => Keyboard.release(key);
+
     return {
         isDown: () => { return Keyboard.isDown(key) },
         isUp: () => { return Keyboard.isUp(key) },
         onDown,
         onUp: (h) => Keyboard.onUp(key, (ev) => h(ev.modifierKeys)),
         tap,
-        hold: () => Keyboard.hold(key),
-        release: () => Keyboard.release(key),
+        hold,
+        release,
         get value() { return key },
         ..._commonButtonExt(tap),
-        ..._physicalButtonExt(onDown),
+        ..._physicalButtonExt({hold, release, onDown}),
         type: 'keyboard',
+        toString: () => `${key}`
     }
 }
 
@@ -67,19 +87,23 @@ export const PhysicalMouseButton = (key: MouseButton) : IMouseButton => {
     const tap = () => Mouse.click(key);
     const onDown = (h: Handler) => Mouse.onDown(key, (ev) => h(ev.modifierKeys));
 
+    const hold = () => Mouse.hold(key);
+    const release = () => Mouse.release(key);
+
     return {
         isDown: () => { return Mouse.isDown(key) },
         isUp: () => { return Mouse.isUp(key) },
         onDown,
         onUp: (h) => Mouse.onUp(key, (ev) => h(ev.modifierKeys)),
         tap,
-        hold: () => Mouse.hold(key),
-        release: () => Mouse.release(key),
+        hold,
+        release,
         get value() { return key },
         onClick: (h) => Mouse.onClick(key, h),
         doubleClick: () => Mouse.doubleClick(key),
         ..._commonButtonExt(tap),
-        ..._physicalButtonExt(onDown),
+        ..._physicalButtonExt({hold, release, onDown}),
         type: 'mouse',
+        toString: () => `${key} (mouse)`
     }
 }
