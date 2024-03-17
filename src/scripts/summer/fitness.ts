@@ -1,4 +1,3 @@
-import { Key } from "suchibot";
 import { PhysicalKeyboardButton } from "../../utils/wrapper/physicalButton";
 import { whileNeedAsync } from "../../utils/keyboard/whileNeed";
 import '../../extensions/extensions';
@@ -6,6 +5,7 @@ import { WhenKeyProps } from "../../utils/keyboard/types";
 import { getCommonScripts } from "./commonScripts";
 import { doc } from "../../utils/keyboard/doc";
 import { execScripts, wrapToScriptWithDoc } from "../../utils/keyboard/scriptWithDoc";
+import { Key } from "../../utils/suchibot";
 
 type BurpeeScriptProps = {
     sitDelay?: number;

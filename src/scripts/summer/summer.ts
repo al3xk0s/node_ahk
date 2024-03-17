@@ -1,4 +1,4 @@
-import { Key } from "suchibot";
+import { Key } from "../../utils/suchibot";
 import { PhysicalKeyboardButton } from "../../utils/wrapper/physicalButton";
 import { getTickKey } from "../../utils/keyboard/tickKey";
 import { getScrollScripts } from "./scrollScripts";
@@ -7,9 +7,7 @@ import { getTapKey } from "../../utils/keyboard/tapKey";
 import { ScrollDownAsButton, ScrollUpAsButton } from "../../utils/wrapper/scrollAsButton";
 
 import '../../extensions/extensions';
-import { getHoldKey } from "../../utils/keyboard/holdKey";
 import { getCommonScripts } from "./commonScripts";
-import { doc } from "../../utils/keyboard/doc";
 import { execScripts } from "../../utils/keyboard/scriptWithDoc";
 
 const main = () => {
@@ -24,9 +22,7 @@ const main = () => {
 
     getShifterScript(PhysicalKeyboardButton(Key.NUMPAD_ADD), sixShifterPairs),
 
-    getCommonScripts(),
-
-    getHoldKey({when: PhysicalKeyboardButton(Key.PAGE_DOWN), then: PhysicalKeyboardButton(Key.LEFT_CONTROL)}),
+    getCommonScripts(),    
 
     getTapKey({when: PhysicalKeyboardButton(Key.UP), then: ScrollUpAsButton()}),
 

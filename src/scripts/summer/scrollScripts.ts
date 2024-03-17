@@ -44,37 +44,3 @@ export const getScrollScripts = wrapToScriptWithDoc(
         `and ${doc.activate(triggerButton)} to start scroll tick`
     ].join(' ')
 })
-
-// export const getScrollScripts = ({
-//     scrollDownToggle,
-//     scrollUpToggle,
-//     triggerButton: button,
-//     delayMs = 50,
-//     scrollStep = 50,
-// }: ScrollScriptsProps) : ScriptWithDoc => {
-//     const call = () => {
-//         const scrollUp = ScrollUpAsButton(scrollStep);
-//         const scrollDown = ScrollDownAsButton(scrollStep);
-//         const state = toggleStateByTap({ key: button });
-
-//         state.listen(() => console.log(`Scroll: ${state.isEnabled}`))
-
-//         const currentButton = Rx(scrollUp, { forceUpdate: true });
-
-//         const handler = () => currentButton.value.tick({ needContinue: () => state.isEnabled, delayMs });
-
-//         scrollDownToggle.onDown(() => currentButton.setValue(scrollDown));
-//         scrollUpToggle.onDown(() => currentButton.setValue(scrollUp));
-
-//         return button.onDown(handler);
-//     }
-
-//     return Object.assign(
-//         call, {
-//         doc: [
-//             `${doc.activate(scrollUpToggle).toTitleCase()} to up direction`,
-//             `or ${scrollDownToggle.toString()} to down direction,`,
-//             `and ${doc.activate(button)} to start scroll tick`
-//         ].join(' ')
-//     })
-// }

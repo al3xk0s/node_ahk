@@ -1,6 +1,7 @@
-import { MouseEvent, Key, MouseButton, Keyboard, Mouse, KeyboardModifierKeysState } from 'suchibot';
+import { MouseEvent, Keyboard, Mouse, KeyboardModifierKeysState } from 'suchibot';
 import { BoolState, IBoolState } from '../../shared/utils/boolState';
 import { Handler, IButton, Listener, _commonButtonExt } from './button';
+import { Key, MouseKey } from '../suchibot';
 
 type ButtonType = 'keyboard' | 'mouse';
 
@@ -41,7 +42,7 @@ const _physicalButtonExt = ({
     }
 }
 
-export interface IPhysicalButton<T extends Key | MouseButton = Key | MouseButton> extends IButton, IPhysicalButtonExt {
+export interface IPhysicalButton<T extends Key | MouseKey = Key | MouseKey> extends IButton, IPhysicalButtonExt {
     onDown(handler: Handler) : Listener;
     onUp(handler: Handler) : Listener;
     isDown(): boolean;
@@ -55,12 +56,12 @@ export interface IPhysicalButton<T extends Key | MouseButton = Key | MouseButton
 
 export type IKeyboardButton = IPhysicalButton<Key>;
 
-export interface IMouseButton extends IPhysicalButton<MouseButton> {
+export interface IMouseKey extends IPhysicalButton<MouseKey> {
     onClick(handler: (event: MouseEvent) => void) : Listener;
     doubleClick() : void;
 }
 
-export const PhysicalKeyboardButton = (key: Key) : IKeyboardButton => {
+export const PhysicalKeyboardButton = (key: Key) : IKeyboardButton => {        
     const tap = () => Keyboard.tap(key);
     const onDown = (h: Handler) => Keyboard.onDown(key, (ev) => h(ev.modifierKeys));
 
@@ -83,7 +84,7 @@ export const PhysicalKeyboardButton = (key: Key) : IKeyboardButton => {
     }
 }
 
-export const PhysicalMouseButton = (key: MouseButton) : IMouseButton => {
+export const PhysicalMouseKey = (key: MouseKey) : IMouseKey => {
     const tap = () => Mouse.click(key);
     const onDown = (h: Handler) => Mouse.onDown(key, (ev) => h(ev.modifierKeys));
 

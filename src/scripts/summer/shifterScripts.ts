@@ -1,9 +1,9 @@
-import { Key } from "suchibot";
 import { toggleStateByTap } from "../../utils/keyboard/toggleStateByTap";
 import { IPhysicalButton, PhysicalKeyboardButton } from "../../utils/wrapper/physicalButton"
 import { doc } from "../../utils/keyboard/doc";
-import { ScriptWithDoc, wrapToScriptWithDoc } from "../../utils/keyboard/scriptWithDoc";
+import { wrapToScriptWithDoc } from "../../utils/keyboard/scriptWithDoc";
 import { DisposeWrapper } from "../../shared/utils/observable";
+import { Key } from "../../utils/suchibot";
 
 export interface IShifterKey {
     trigger: IPhysicalButton;

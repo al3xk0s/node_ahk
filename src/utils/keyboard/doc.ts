@@ -42,7 +42,7 @@ export const doc = (() => {
 
     const join = (docs: AnyDoc) => toStringArray(docs).map(d => d).join('\n');
     const print = (docs: AnyDoc) => console.log(join(docs));
-
+    
     return {
         holdKey,
         tapKey,
