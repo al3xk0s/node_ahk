@@ -11,20 +11,17 @@ type BasicTickTimesProps = {  times: number; }
 type TickProps = BasicTickProps & AsyncTickProps;
 type TickTimesProps = BasicTickTimesProps & AsyncTickProps;
 
-type TickSyncProps = BasicTickProps;
-type TickTimesSyncProps = BasicTickProps & BasicTickTimesProps;
-
-interface IButtonExtentions {
+interface IKeyExtentions {
     tick(props: TickProps) : Promise<void>;
     tickTimes(props: TickTimesProps) : Promise<void>;
 }
 
-export interface IButton extends IButtonExtentions {
+export interface IKey extends IKeyExtentions {
     tap() : void;
     toString() : string;
 }
 
-export const _commonButtonExt = (tap: () => void) : IButtonExtentions => {
+export const _commonKeyExt = (tap: () => void) : IKeyExtentions => {
     const getTimesPredicate = (times: number) => (c: number) => c < times + 1;
 
     const tick = async (props: TickProps) => whileNeed({...props, execute: tap});

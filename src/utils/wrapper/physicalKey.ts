@@ -1,29 +1,29 @@
 import { MouseEvent, Keyboard, Mouse, KeyboardModifierKeysState } from 'suchibot';
 import { BoolState, IBoolState } from '../../shared/utils/boolState';
-import { Handler, IButton, Listener, _commonButtonExt } from './button';
+import { Handler, IKey, Listener, _commonKeyExt } from './key';
 import { Key, MouseKey } from '../suchibot';
 
-type ButtonType = 'keyboard' | 'mouse';
+type KeyType = 'keyboard' | 'mouse';
 
 type ToggleEnabledOptions = { initialEnabled?: boolean, onDisable?: ToggleEnabledHandler; };
 export type ToggleEnabledHandler = (state: IBoolState, modifiers: KeyboardModifierKeysState) => void;
 
-interface IPhysicalButtonExt {
+interface IPhysicalKeyExt {
     onToggleEnabled(handler: ToggleEnabledHandler, options?: ToggleEnabledOptions) : Listener;
     holdTimed(holdTime: number) : Promise<void>;
 }
 
-type CreatePhysicalButtonExtProps = {
+type CreatePhysicalKeyExtProps = {
     onDown: (h: Handler) => Listener;
     hold: () => void;
     release: () => void;
 }
 
-const _physicalButtonExt = ({
+const _physicalKeyExt = ({
     onDown,
     hold,
     release
-}: CreatePhysicalButtonExtProps) : IPhysicalButtonExt => {
+}: CreatePhysicalKeyExtProps) : IPhysicalKeyExt => {
     return {
         onToggleEnabled: (handler, {initialEnabled = false, onDisable} = {}) => {
             const state = BoolState(initialEnabled);
@@ -42,7 +42,7 @@ const _physicalButtonExt = ({
     }
 }
 
-export interface IPhysicalButton<T extends Key | MouseKey = Key | MouseKey> extends IButton, IPhysicalButtonExt {
+export interface IPhysicalKey<T extends Key | MouseKey = Key | MouseKey> extends IKey, IPhysicalKeyExt {
     onDown(handler: Handler) : Listener;
     onUp(handler: Handler) : Listener;
     isDown(): boolean;
@@ -51,17 +51,17 @@ export interface IPhysicalButton<T extends Key | MouseKey = Key | MouseKey> exte
     release() : void;
 
     value: T;
-    type: ButtonType;
+    type: KeyType;
 }
 
-export type IKeyboardButton = IPhysicalButton<Key>;
+export type IKeyboardKey = IPhysicalKey<Key>;
 
-export interface IMouseKey extends IPhysicalButton<MouseKey> {
+export interface IMouseKey extends IPhysicalKey<MouseKey> {
     onClick(handler: (event: MouseEvent) => void) : Listener;
     doubleClick() : void;
 }
 
-export const PhysicalKeyboardButton = (key: Key) : IKeyboardButton => {        
+export const PhysicalKeyboardKey = (key: Key) : IKeyboardKey => {        
     const tap = () => Keyboard.tap(key);
     const onDown = (h: Handler) => Keyboard.onDown(key, (ev) => h(ev.modifierKeys));
 
@@ -77,8 +77,8 @@ export const PhysicalKeyboardButton = (key: Key) : IKeyboardButton => {
         hold,
         release,
         get value() { return key },
-        ..._commonButtonExt(tap),
-        ..._physicalButtonExt({hold, release, onDown}),
+        ..._commonKeyExt(tap),
+        ..._physicalKeyExt({hold, release, onDown}),
         type: 'keyboard',
         toString: () => `${key}`
     }
@@ -102,8 +102,8 @@ export const PhysicalMouseKey = (key: MouseKey) : IMouseKey => {
         get value() { return key },
         onClick: (h) => Mouse.onClick(key, h),
         doubleClick: () => Mouse.doubleClick(key),
-        ..._commonButtonExt(tap),
-        ..._physicalButtonExt({hold, release, onDown}),
+        ..._commonKeyExt(tap),
+        ..._physicalKeyExt({hold, release, onDown}),
         type: 'mouse',
         toString: () => `${key} (mouse)`
     }

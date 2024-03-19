@@ -1,13 +1,13 @@
 import { toggleStateByTap } from "../../utils/keyboard/toggleStateByTap";
-import { IPhysicalButton, PhysicalKeyboardButton } from "../../utils/wrapper/physicalButton"
+import { IPhysicalKey } from "../../utils/wrapper/physicalKey"
 import { doc } from "../../utils/keyboard/doc";
 import { wrapToScriptWithDoc } from "../../utils/keyboard/scriptWithDoc";
 import { DisposeWrapper } from "../../shared/utils/observable";
-import { Key } from "../../utils/suchibot";
+import { Key } from "../../utils/wrapper/keys";
 
 export interface IShifterKey {
-    trigger: IPhysicalButton;
-    target: IPhysicalButton;
+    trigger: IPhysicalKey;
+    target: IPhysicalKey;
 }
 
 export enum Gear {
@@ -23,7 +23,7 @@ export enum Gear {
 
 type KeyGearPair = IShifterKey & { gear: Gear }
 
-export const shifterScript = (toggle: IPhysicalButton, pairs: KeyGearPair[]) => {
+export const shifterScript = (toggle: IPhysicalKey, pairs: KeyGearPair[]) => {
     const isEnabled = toggleStateByTap({key: toggle});
 
     const map = new Map<Gear, KeyGearPair>();
@@ -69,33 +69,33 @@ const pairsToString = (pairs: KeyGearPair[]) => pairs.map(pairToString).join(', 
 export const fourShifterPairs = [
     {
         gear: Gear.first,
-        target: PhysicalKeyboardButton(Key.THREE),
-        trigger: PhysicalKeyboardButton(Key.NUMPAD_7),
+        target: Key.THREE,
+        trigger: Key.NUMPAD_7,
     },
     {
         gear: Gear.second,
-        target: PhysicalKeyboardButton(Key.FOUR),
-        trigger: PhysicalKeyboardButton(Key.NUMPAD_1),
+        target: Key.FOUR,
+        trigger: Key.NUMPAD_1,
     },
     {
         gear: Gear.third,
-        target: PhysicalKeyboardButton(Key.FIVE),
-        trigger: PhysicalKeyboardButton(Key.NUMPAD_8),
+        target: Key.FIVE,
+        trigger: Key.NUMPAD_8,
     },
     {
         gear: Gear.four,
-        target: PhysicalKeyboardButton(Key.SIX),
-        trigger: PhysicalKeyboardButton(Key.NUMPAD_2),
+        target: Key.SIX,
+        trigger: Key.NUMPAD_2,
     },
     {
         gear: Gear.back,
-        target: PhysicalKeyboardButton(Key.NINE),
-        trigger: PhysicalKeyboardButton(Key.NUMPAD_0),
+        target: Key.NINE,
+        trigger: Key.NUMPAD_0,
     },
     {
         gear: Gear.neutral,
-        target: PhysicalKeyboardButton(Key.ZERO),
-        trigger: PhysicalKeyboardButton(Key.NUMPAD_5),
+        target: Key.ZERO,
+        trigger: Key.NUMPAD_5,
     }
 ];
 
@@ -103,8 +103,8 @@ export const fiveShifterPairs = [
     ...fourShifterPairs,
     {
         gear: Gear.five,
-        target: PhysicalKeyboardButton(Key.SEVEN),
-        trigger: PhysicalKeyboardButton(Key.NUMPAD_9),
+        target: Key.SEVEN,
+        trigger: Key.NUMPAD_9,
     },
 ];
 
@@ -112,8 +112,8 @@ export const sixShifterPairs = [
     ...fiveShifterPairs,
     {
       gear: Gear.six,
-      target: PhysicalKeyboardButton(Key.EIGHT),
-      trigger: PhysicalKeyboardButton(Key.NUMPAD_3),
+      target: Key.EIGHT,
+      trigger: Key.NUMPAD_3,
     },
     
   ];

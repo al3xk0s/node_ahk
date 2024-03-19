@@ -1,9 +1,9 @@
 import { BoolState, IBoolState } from '../../shared/utils/boolState';
-import { IPhysicalButton } from '../wrapper/physicalButton';
+import { IPhysicalKey } from '../wrapper/physicalKey';
 
 type ToggleStateByTapProps = {
     initial?: boolean;
-    key: IPhysicalButton;
+    key: IPhysicalKey;
 };
 
 export const toggleStateByTap = ({

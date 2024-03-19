@@ -1,6 +1,6 @@
 import { DisposeWrapper } from "../../shared/utils/observable";
 import { inOfAny } from "../../shared/utils/operators";
-import { Listener } from "../wrapper/button";
+import { Listener } from "../wrapper/key";
 import { AnyDoc, WithDoc, doc } from "./doc";
 
 export type ScriptWithDoc<T = Listener> = {

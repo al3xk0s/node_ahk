@@ -1,25 +1,25 @@
 import { Mouse } from 'suchibot';
 import { Observable } from '../../shared/utils/observable';
-import { IButton, _commonButtonExt } from "./button";
+import { IKey, _commonKeyExt } from "./key";
 
 export enum ScrollDirection {
     up = 1,
     down = -1,
 }
 
-export interface IScrollAsButton extends IButton {
+export interface IScrollAsKey extends IKey {
     readonly step: number;
     readonly direction: ScrollDirection;
 }
 
-type ScrollAsButtonProps = {
+type ScrollAsKeyProps = {
     direction: ScrollDirection,
     step?: number,
 }
 
 const _defaultStep = 100;
 
-export const ScrollAsButton = ({step = _defaultStep, direction}: ScrollAsButtonProps) : IScrollAsButton => {
+export const ScrollAsKey = ({step = _defaultStep, direction}: ScrollAsKeyProps) : IScrollAsKey => {
     const obs = Observable<void>();
     const tap = () => {
         Mouse.scroll({y: step * direction});
@@ -30,15 +30,15 @@ export const ScrollAsButton = ({step = _defaultStep, direction}: ScrollAsButtonP
         step,
         direction,
         tap,
-        ..._commonButtonExt(tap),
+        ..._commonKeyExt(tap),
         toString: () => `${ScrollDirection[direction]} (scroll)`
     }
 }
 
-export const ScrollDownAsButton = (step = _defaultStep) => {
-    return ScrollAsButton({step, direction: ScrollDirection.down});
+export const ScrollDownAsKey = (step = _defaultStep) => {
+    return ScrollAsKey({step, direction: ScrollDirection.down});
 }
 
-export const ScrollUpAsButton = (step = _defaultStep) => {
-    return ScrollAsButton({step, direction: ScrollDirection.up});
+export const ScrollUpAsKey = (step = _defaultStep) => {
+    return ScrollAsKey({step, direction: ScrollDirection.up});
 }

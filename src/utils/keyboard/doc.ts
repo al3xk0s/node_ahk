@@ -1,5 +1,5 @@
-import { IButton } from "../wrapper/button";
-import { IPhysicalButton } from "../wrapper/physicalButton"
+import { IKey } from "../wrapper/key";
+import { IPhysicalKey } from "../wrapper/physicalKey"
 import { KeyByKeyProps } from "./types"
 import '../../extensions/extensions';
 import { inOfAny } from "../../shared/utils/operators";
@@ -11,18 +11,18 @@ export type WithDoc = {
 export type AnyDoc = string | string[] | WithDoc | WithDoc[];
 
 export const doc = (() => {
-    const activate = (key: IButton) => `activate ${key.toString()}`;
-    const tap = (key: IButton) => `tap ${key.toString()}`;
-    const hold = (key: IButton) => `hold ${key.toString()}`;
-    const tick = (key: IButton) => `tick ${key.toString()}`;
+    const activate = (key: IKey) => `activate ${key.toString()}`;
+    const tap = (key: IKey) => `tap ${key.toString()}`;
+    const hold = (key: IKey) => `hold ${key.toString()}`;
+    const tick = (key: IKey) => `tick ${key.toString()}`;
 
-    const holdKey = ({when, then}: KeyByKeyProps<IPhysicalButton, IPhysicalButton>) =>
+    const holdKey = ({when, then}: KeyByKeyProps<IPhysicalKey, IPhysicalKey>) =>
         `When ${activate(when)}, then ${hold(then)}`;
 
-    const tapKey = ({when, then}: KeyByKeyProps<IPhysicalButton, IButton>) =>
+    const tapKey = ({when, then}: KeyByKeyProps<IPhysicalKey, IKey>) =>
         `When ${tap(when)}, then ${tap(then)}`;
 
-    const tickKey = ({when, then}: KeyByKeyProps<IPhysicalButton, IButton>) =>
+    const tickKey = ({when, then}: KeyByKeyProps<IPhysicalKey, IKey>) =>
         `When ${activate(when)}, then ${tick(then)}`;
 
     const isWithDoc = (docs: AnyDoc) => inOfAny('doc', docs);

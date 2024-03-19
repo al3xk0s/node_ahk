@@ -1,11 +1,10 @@
-import { PhysicalKeyboardButton } from "../../utils/wrapper/physicalButton";
 import { whileNeedAsync } from "../../utils/keyboard/whileNeed";
 import '../../extensions/extensions';
 import { WhenKeyProps } from "../../utils/keyboard/types";
 import { getCommonScripts } from "./commonScripts";
 import { doc } from "../../utils/keyboard/doc";
 import { execScripts, wrapToScriptWithDoc } from "../../utils/keyboard/scriptWithDoc";
-import { Key } from "../../utils/suchibot";
+import { Key } from "../../utils/wrapper/keys";
 
 type BurpeeScriptProps = {
     sitDelay?: number;
@@ -13,8 +12,8 @@ type BurpeeScriptProps = {
 } & WhenKeyProps;
 
 const burpeeScript = ({when, sitDelay = 400, jumpDelay = 725}: BurpeeScriptProps) => {
-    const sitButton = PhysicalKeyboardButton(Key.C);
-    const jumpButton = PhysicalKeyboardButton(Key.SPACE);
+    const sitButton = Key.C;
+    const jumpButton = Key.SPACE;
 
     const sit = async () => {
         await sitButton.holdTimed(sitDelay);
@@ -41,7 +40,7 @@ const getBurpeeScript = wrapToScriptWithDoc(
 const main = () => {
     execScripts([
         getCommonScripts(),
-        getBurpeeScript({when: PhysicalKeyboardButton(Key.DOWN)}),
+        getBurpeeScript({when: Key.DOWN}),
     ])
 }
 

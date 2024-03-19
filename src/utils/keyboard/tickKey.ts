@@ -1,12 +1,12 @@
-import { IButton } from "../../utils/wrapper/button";
-import { IPhysicalButton } from "../../utils/wrapper/physicalButton";
+import { IKey } from "../wrapper/key";
+import { IPhysicalKey } from "../wrapper/physicalKey";
 import { doc } from "./doc";
 import { wrapToScriptWithDoc } from "./scriptWithDoc";
 import { KeyByKeyProps } from "./types";
 
 type TickKeyProps = {
   delayMs?: number,
-} & KeyByKeyProps<IPhysicalButton, IButton>;
+} & KeyByKeyProps<IPhysicalKey, IKey>;
 
 export const tickKey = ({
   when,

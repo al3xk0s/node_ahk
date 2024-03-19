@@ -1,15 +1,15 @@
 import { Rx } from "../../shared/utils/rx";
 import { toggleStateByTap } from "../../utils/keyboard/toggleStateByTap";
 import { WhileAsyncProps } from "../../utils/keyboard/whileNeed";
-import { IPhysicalButton } from "../../utils/wrapper/physicalButton";
-import { ScrollDownAsButton, ScrollUpAsButton } from "../../utils/wrapper/scrollAsButton";
+import { IPhysicalKey } from "../../utils/wrapper/physicalKey";
 import { doc } from "../../utils/keyboard/doc";
 import { wrapToScriptWithDoc } from "../../utils/keyboard/scriptWithDoc";
+import { ScrollKey } from "../../utils/wrapper/keys";
 
 type ScrollScriptsProps = {
-    scrollUpToggle: IPhysicalButton;
-    scrollDownToggle: IPhysicalButton;
-    triggerButton: IPhysicalButton;
+    scrollUpToggle: IPhysicalKey;
+    scrollDownToggle: IPhysicalKey;
+    triggerButton: IPhysicalKey;
     scrollStep?: number;   
 } & WhileAsyncProps;
 
@@ -20,8 +20,8 @@ const scrollScript = ({
     delayMs = 50,
     scrollStep = 50,
 }: ScrollScriptsProps) => {
-    const scrollUp = ScrollUpAsButton(scrollStep);
-    const scrollDown = ScrollDownAsButton(scrollStep);
+    const scrollUp = ScrollKey.UP(scrollStep);
+    const scrollDown = ScrollKey.DOWN(scrollStep);
     const state = toggleStateByTap({ key: button });
 
     state.listen(() => console.log(`Scroll: ${state.isEnabled}`))

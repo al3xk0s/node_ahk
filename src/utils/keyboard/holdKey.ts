@@ -1,4 +1,4 @@
-import { IPhysicalButton } from "../wrapper/physicalButton";
+import { IPhysicalKey } from "../wrapper/physicalKey";
 import { KeyByKeyProps } from "./types";
 import { doc } from "./doc";
 import { wrapToScriptWithDoc } from "./scriptWithDoc";
@@ -6,7 +6,7 @@ import { wrapToScriptWithDoc } from "./scriptWithDoc";
 export const holdKey = ({
   when,
   then
-}: KeyByKeyProps<IPhysicalButton, IPhysicalButton>) => {
+}: KeyByKeyProps<IPhysicalKey, IPhysicalKey>) => {
   return when.onToggleEnabled(() => {
     then.hold();
   }, {
