@@ -1,7 +1,9 @@
+import '../extensions/extensions';
+
 import { MouseEvent, Keyboard, Mouse, KeyboardModifierKeysState } from 'suchibot';
-import { BoolState, IBoolState } from '../../shared/utils/boolState';
+import { BoolState, IBoolState } from '@node-ahk/shared/rx';
+import { SuchKey, SuchMouseKey } from '@node-ahk/utils';
 import { Handler, IKey, Listener, _commonKeyExt } from './key';
-import { Key, MouseKey } from '../suchibot';
 
 type KeyType = 'keyboard' | 'mouse';
 
@@ -42,7 +44,7 @@ const _physicalKeyExt = ({
     }
 }
 
-export interface IPhysicalKey<T extends Key | MouseKey = Key | MouseKey> extends IKey, IPhysicalKeyExt {
+export interface IPhysicalKey<T extends SuchKey | SuchMouseKey = SuchKey | SuchMouseKey> extends IKey, IPhysicalKeyExt {
     onDown(handler: Handler) : Listener;
     onUp(handler: Handler) : Listener;
     isDown(): boolean;
@@ -54,14 +56,14 @@ export interface IPhysicalKey<T extends Key | MouseKey = Key | MouseKey> extends
     type: KeyType;
 }
 
-export type IKeyboardKey = IPhysicalKey<Key>;
+export type IKeyboardKey = IPhysicalKey<SuchKey>;
 
-export interface IMouseKey extends IPhysicalKey<MouseKey> {
+export interface IMouseKey extends IPhysicalKey<SuchMouseKey> {
     onClick(handler: (event: MouseEvent) => void) : Listener;
     doubleClick() : void;
 }
 
-export const PhysicalKeyboardKey = (key: Key) : IKeyboardKey => {        
+export const PhysicalKeyboardKey = (key: SuchKey) : IKeyboardKey => {        
     const tap = () => Keyboard.tap(key);
     const onDown = (h: Handler) => Keyboard.onDown(key, (ev) => h(ev.modifierKeys));
 
@@ -84,7 +86,7 @@ export const PhysicalKeyboardKey = (key: Key) : IKeyboardKey => {
     }
 }
 
-export const PhysicalMouseKey = (key: MouseKey) : IMouseKey => {
+export const PhysicalMouseKey = (key: SuchMouseKey) : IMouseKey => {
     const tap = () => Mouse.click(key);
     const onDown = (h: Handler) => Mouse.onDown(key, (ev) => h(ev.modifierKeys));
 

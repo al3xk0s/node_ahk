@@ -1,4 +1,4 @@
-import { DisposeWrapper, IDisposeWrapper, Observable } from "./observable";
+import { DisposeWrapper, IDisposeWrapper } from "./observable";
 import { IRx, Rx, RxOptions } from "./rx";
 
 export interface IBoolState extends IRx<boolean> {

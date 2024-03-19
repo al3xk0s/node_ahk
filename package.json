@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
+    "bundle": "tsc-bundle tsconfig.bundle.json",
     "start": "npm run build && node dist/index.js"
   },
   "keywords": [],

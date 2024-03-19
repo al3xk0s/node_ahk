@@ -1,4 +1,4 @@
-import { Key as K, MouseKey as MK } from "../suchibot";
+import { SuchKey as K, SuchMouseKey as MK } from "@node-ahk/utils";
 import { IKeyboardKey, IMouseKey, PhysicalKeyboardKey, PhysicalMouseKey } from "./physicalKey";
 import { ScrollDownAsKey, ScrollUpAsKey } from "./scrollAsKey";
 
@@ -20,7 +20,7 @@ export const MouseKey = (() => {
         .forEach(([k, v]) => keys[k] = PhysicalMouseKey(v));
 
     return keys as { [k in keyof typeof MK]: IMouseKey }
-})()
+})();
 
 export const ScrollKey = {
     UP: ScrollUpAsKey,

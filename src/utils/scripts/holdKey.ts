@@ -1,7 +1,6 @@
-import { IPhysicalKey } from "../wrapper/physicalKey";
+import { IPhysicalKey } from "@node-ahk/keys";
+import { doc, wrapToScriptWithDoc } from "@node-ahk/docScript";
 import { KeyByKeyProps } from "./types";
-import { doc } from "./doc";
-import { wrapToScriptWithDoc } from "./scriptWithDoc";
 
 export const holdKey = ({
   when,

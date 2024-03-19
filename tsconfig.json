@@ -11,8 +11,11 @@
     "outDir": "dist",
     "declaration": true,
     "strict": true,
-    "alwaysStrict": true,    
-  },
+    "alwaysStrict": true,
+    "paths": {
+      "@node-ahk/*": [ "./src/*" ]
+    }
+  },  
   "include": [
     "src/**/*.ts"
   ],

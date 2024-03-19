@@ -1,11 +1,12 @@
-import { Key, ScrollKey } from "../../utils/wrapper/keys";
-import { getScrollScripts } from "./scrollScripts";
-import { getShifterScript, sixShifterPairs } from "./shifterScripts";
-import { getTapKey } from "../../utils/keyboard/tapKey";
+import '@node-ahk/extensions/extensions';
 
-import '../../extensions/extensions';
-import { getCommonScripts } from "./commonScripts";
-import { execScripts } from "../../utils/keyboard/scriptWithDoc";
+import { execScripts } from '@node-ahk/docScript';
+import { Key, ScrollKey } from '@node-ahk/keys';
+import { getTapKey } from '@node-ahk/utils/scripts';
+import { getCommonScripts } from './commonScripts';
+import { getScrollScripts } from './scrollScripts';
+import { getShifterScript, sixShifterPairs } from './shifterScripts';
+
 
 const main = () => {
   execScripts([

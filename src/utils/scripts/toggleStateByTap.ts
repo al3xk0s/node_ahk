@@ -1,5 +1,5 @@
-import { BoolState, IBoolState } from '../../shared/utils/boolState';
-import { IPhysicalKey } from '../wrapper/physicalKey';
+import { BoolState, IBoolState } from '@node-ahk/shared/rx';
+import { IPhysicalKey } from '@node-ahk/keys';
 
 type ToggleStateByTapProps = {
     initial?: boolean;

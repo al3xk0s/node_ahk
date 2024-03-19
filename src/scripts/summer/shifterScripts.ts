@@ -1,9 +1,7 @@
-import { toggleStateByTap } from "../../utils/keyboard/toggleStateByTap";
-import { IPhysicalKey } from "../../utils/wrapper/physicalKey"
-import { doc } from "../../utils/keyboard/doc";
-import { wrapToScriptWithDoc } from "../../utils/keyboard/scriptWithDoc";
-import { DisposeWrapper } from "../../shared/utils/observable";
-import { Key } from "../../utils/wrapper/keys";
+import { doc, wrapToScriptWithDoc } from "@node-ahk/docScript";
+import { IPhysicalKey, Key } from "@node-ahk/keys";
+import { DisposeWrapper } from "@node-ahk/shared/rx";
+import { toggleStateByTap } from "@node-ahk/utils/scripts";
 
 export interface IShifterKey {
     trigger: IPhysicalKey;

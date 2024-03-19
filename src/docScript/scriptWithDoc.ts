@@ -1,9 +1,9 @@
-import { DisposeWrapper } from "../../shared/utils/observable";
-import { inOfAny } from "../../shared/utils/operators";
-import { Listener } from "../wrapper/key";
+import { KeyListener } from "@node-ahk/keys";
+import { DisposeWrapper } from "@node-ahk/shared/rx";
+import { inOfAny } from "@node-ahk/shared/operators";
 import { AnyDoc, WithDoc, doc } from "./doc";
 
-export type ScriptWithDoc<T = Listener> = {
+export type ScriptWithDoc<T = KeyListener> = {
     (): T;
 } & WithDoc;
 
@@ -23,7 +23,7 @@ export const wrapToScriptWithDoc = <F extends (...args: Parameters<F>) => Return
     }
 }
 
-export const combineScriptsWithDoc = (scripts: ScriptWithDoc<void | (() => void) | Listener>[]) => {
+export const combineScriptsWithDoc = (scripts: ScriptWithDoc<void | (() => void) | KeyListener>[]) => {
     const dw = DisposeWrapper();
 
     const call = () => {
@@ -31,7 +31,7 @@ export const combineScriptsWithDoc = (scripts: ScriptWithDoc<void | (() => void)
             const res = l();
 
             if(typeof res === 'function') return res as (() => void);
-            if(inOfAny('stop', res)) return (res as Listener).stop;
+            if(inOfAny('stop', res)) return (res as KeyListener).stop;
 
             return () => {};
         }));
@@ -48,4 +48,3 @@ export const execScripts = (scripts: ScriptWithDoc<any>[]) => {
     scripts.forEach(s => s());
     scripts.forEach(s => doc.print(s));
 }
-

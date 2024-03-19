@@ -1,5 +1,5 @@
 import { Mouse } from 'suchibot';
-import { Observable } from '../../shared/utils/observable';
+import { Observable } from '@node-ahk/shared/rx';
 import { IKey, _commonKeyExt } from "./key";
 
 export enum ScrollDirection {

@@ -1,5 +1,5 @@
 import { KeyboardModifierKeysState } from 'suchibot';
-import { WhileAsyncProps, whileNeed, WhilePredicateProps } from '../keyboard/whileNeed';
+import { WhileAsyncProps, whileNeed, WhilePredicateProps } from '@node-ahk/utils/scripts';
 
 export type Listener = { stop: () => any }
 export type Handler = (modifiers: KeyboardModifierKeysState) => void;

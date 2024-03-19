@@ -1,10 +1,8 @@
-import { whileNeedAsync } from "../../utils/keyboard/whileNeed";
-import '../../extensions/extensions';
-import { WhenKeyProps } from "../../utils/keyboard/types";
+import '@node-ahk/extensions/extensions';
+import { Key } from '@node-ahk/keys';
+import { WhenKeyProps, whileNeedAsync } from '@node-ahk/utils/scripts';
+import { doc, execScripts, wrapToScriptWithDoc } from '@node-ahk/docScript';
 import { getCommonScripts } from "./commonScripts";
-import { doc } from "../../utils/keyboard/doc";
-import { execScripts, wrapToScriptWithDoc } from "../../utils/keyboard/scriptWithDoc";
-import { Key } from "../../utils/wrapper/keys";
 
 type BurpeeScriptProps = {
     sitDelay?: number;

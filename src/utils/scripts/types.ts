@@ -1,6 +1,4 @@
-import { IKey, Listener } from "../wrapper/key"
-import { IPhysicalKey } from "../wrapper/physicalKey"
-import { WithDoc } from "./doc";
+import { IKey, IPhysicalKey } from "@node-ahk/keys"
 
 export type WhenKeyProps<B = IPhysicalKey> = {
     when: B;

@@ -1,4 +1,4 @@
-import { IDisposable, IListenable, IObservable, Observable } from "./observable";
+import { IDisposable, IListenable, Observable } from "./observable";
 
 type RxSetValueOptions = {
     forceUpdate?: boolean;

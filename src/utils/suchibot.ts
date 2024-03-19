@@ -2,10 +2,10 @@ import { Key as K, MouseButton as M } from "suchibot";
 
 type OmitedKeys = Omit<typeof K, 'PAGE_UP' | 'NUM_LOCK'>;
 
-type Keys = { [k in keyof OmitedKeys]: Key };
-type MouseKeys = { [k in keyof typeof M]: MouseKey };
+type Keys = { [k in keyof OmitedKeys]: SuchKey };
+type MouseKeys = { [k in keyof typeof M]: SuchMouseKey };
 
-export const Key = (() => {
+export const SuchKey = (() => {
     const keys = {...K} as Partial<typeof K>;
 
     delete keys.PAGE_UP;
@@ -14,7 +14,7 @@ export const Key = (() => {
     return keys as Keys;
 })()
 
-export const MouseKey = M as MouseKeys;
+export const SuchMouseKey = M as MouseKeys;
 
-export type Key = K & { __myType__: 'Key' };
-export type MouseKey = M & { __myType__: 'Mouse' };
+export type SuchKey = K & { __myType__: 'Key' };
+export type SuchMouseKey = M & { __myType__: 'Mouse' };

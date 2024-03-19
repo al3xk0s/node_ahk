@@ -1,7 +1,6 @@
-import { getHoldKey } from "../../utils/keyboard/holdKey";
-import { getTickKey } from "../../utils/keyboard/tickKey";
-import { ScriptWithDoc, combineScriptsWithDoc } from "../../utils/keyboard/scriptWithDoc";
-import { Key } from "../../utils/wrapper/keys";
+import { ScriptWithDoc, combineScriptsWithDoc } from "@node-ahk/docScript";
+import { getHoldKey, getTickKey } from "@node-ahk/utils/scripts";
+import { Key } from "@node-ahk/keys";
 
 export const getCommonScripts = () : ScriptWithDoc => 
     combineScriptsWithDoc([

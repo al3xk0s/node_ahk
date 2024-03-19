@@ -1,8 +1,6 @@
-import { IKey } from "../wrapper/key";
-import { IPhysicalKey } from "../wrapper/physicalKey"
-import { KeyByKeyProps } from "./types"
-import '../../extensions/extensions';
-import { inOfAny } from "../../shared/utils/operators";
+import { IKey, IPhysicalKey } from "@node-ahk/keys";
+import { inOfAny } from "@node-ahk/shared/operators";
+import { KeyByKeyProps } from "@node-ahk/utils/scripts";
 
 export type WithDoc = {
     doc: AnyDoc;

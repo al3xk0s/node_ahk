@@ -1,8 +1,7 @@
 import { v4 as uuid } from 'uuid';
-import { stream } from './stream';
 
-type Listener<T> = (value: T) => any;
-type Disposer = () => void;
+export type Listener<T> = (value: T) => any;
+export type Disposer = () => void;
 
 export interface IDisposable {
     dispose() : void;
