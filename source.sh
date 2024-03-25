@@ -1,9 +1,12 @@
-__NODE_AHK__ROOT="dist/scripts/"
+export NODE_AHK_SCRIPTS="dist/scripts"
 
 __nodeAhk__runCompgen() {
     local cur="$1"
+    local old="$(pwd)"
 
-    node.exe compgen.js "$__NODE_AHK__ROOT" "$cur"
+    cd "$NODE_AHK_ROOT"
+    node.exe compgen.js "$NODE_AHK_SCRIPTS/" "$cur"
+    cd "$old"
 }
 
 __nodeAhk__runComplete() {
@@ -11,8 +14,10 @@ __nodeAhk__runComplete() {
     COMPREPLY=( $(__nodeAhk__runCompgen "$cur") )
 }
 
-complete -o nospace -F __nodeAhk__runComplete run-script
+complete -o nospace -F __nodeAhk__runComplete run-ahk-script
 
-function run-script() {   
-    npx suchibot "$__NODE_AHK__ROOT$1"
+function run-ahk-script() {
+    while IFS= read -r line; do
+        echo "$line"
+    done < <(cd "$NODE_AHK_ROOT" && npx suchibot "$NODE_AHK_ROOT/$NODE_AHK_SCRIPTS/$1")
 }

@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "bundle": "tsc-bundle tsconfig.bundle.json",
+    "bundle": "node esbuild.js bundle",
     "start": "npm run build && node dist/index.js"
   },
   "keywords": [],
@@ -13,6 +13,8 @@
   "license": "ISC",
   "devDependencies": {
     "@types/uuid": "^9.0.7",
+    "esbuild": "^0.20.2",
+    "esbuild-plugin-d.ts": "^1.2.3",
     "ts-node": "^10.9.1",
     "typescript": "^5.2.2"
   },

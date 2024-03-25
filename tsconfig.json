@@ -8,6 +8,7 @@
     "preserveConstEnums": true,
     "sourceMap": true,
     "forceConsistentCasingInFileNames": true,
+    "declarationMap": true,    
     "outDir": "dist",
     "declaration": true,
     "strict": true,
