@@ -1,7 +1,7 @@
 import '@node-ahk/extensions/extensions';
 import { Key } from '@node-ahk/keys';
 import { WhenKeyProps, whileNeedAsync } from '@node-ahk/utils/scripts';
-import { doc, execScripts, wrapToScriptWithDoc } from '@node-ahk/docScript';
+import { doc, runScripts, wrapToScriptWithDoc } from '@node-ahk/docScript';
 import { getCommonScripts } from "./commonScripts";
 
 type BurpeeScriptProps = {
@@ -36,7 +36,7 @@ const getBurpeeScript = wrapToScriptWithDoc(
 });
 
 const main = () => {
-    execScripts([
+    runScripts([
         getCommonScripts(),
         getBurpeeScript({when: Key.DOWN}),
     ])

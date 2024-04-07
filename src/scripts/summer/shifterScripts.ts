@@ -1,6 +1,7 @@
 import { doc, wrapToScriptWithDoc } from "@node-ahk/docScript";
 import { IPhysicalKey, Key } from "@node-ahk/keys";
 import { DisposeWrapper } from "@node-ahk/shared/rx";
+import { toListener } from "@node-ahk/utils";
 import { toggleStateByTap } from "@node-ahk/utils/scripts";
 
 export interface IShifterKey {
@@ -50,7 +51,7 @@ export const shifterScript = (toggle: IPhysicalKey, pairs: KeyGearPair[]) => {
         dw.addDisposer(ls.stop);
     }
 
-    return { stop: dw.dispose }
+    return toListener(dw.dispose);
 }
 
 export const getShifterScript = wrapToScriptWithDoc(

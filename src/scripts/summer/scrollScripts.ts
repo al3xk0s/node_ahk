@@ -1,6 +1,7 @@
 import { doc, wrapToScriptWithDoc } from "@node-ahk/docScript";
 import { IPhysicalKey, ScrollKey } from "@node-ahk/keys";
 import { Rx } from "@node-ahk/shared/rx";
+import { combineListeners } from "@node-ahk/utils";
 import { WhileAsyncProps, toggleStateByTap } from "@node-ahk/utils/scripts";
 
 type ScrollScriptsProps = {
@@ -19,18 +20,19 @@ const scrollScript = ({
 }: ScrollScriptsProps) => {
     const scrollUp = ScrollKey.UP(scrollStep);
     const scrollDown = ScrollKey.DOWN(scrollStep);
-    const state = toggleStateByTap({ key: button });
 
-    state.listen(() => console.log(`Scroll: ${state.isEnabled}`))
+    const release = () => {
+        scrollUp.releaseTick();
+        scrollDown.releaseTick();
+    }
 
     const currentButton = Rx(scrollUp, { forceUpdate: true });
 
-    const handler = () => currentButton.value.tick({ needContinue: () => state.isEnabled, delayMs });
-
-    scrollDownToggle.onDown(() => currentButton.setValue(scrollDown));
-    scrollUpToggle.onDown(() => currentButton.setValue(scrollUp));
-
-    return button.onDown(handler);
+    return combineListeners([
+        scrollDownToggle.onDown(() => currentButton.setValue(scrollDown)),
+        scrollUpToggle.onDown(() => currentButton.setValue(scrollUp)),
+        button.onToggleEnabled(() => currentButton.value.tick({ delayMs }), { onDisable: release }),
+    ])
 }
 
 export const getScrollScripts = wrapToScriptWithDoc(

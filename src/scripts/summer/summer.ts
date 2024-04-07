@@ -1,6 +1,6 @@
 import '@node-ahk/extensions/extensions';
 
-import { execScripts } from '@node-ahk/docScript';
+import { runScripts } from '@node-ahk/docScript';
 import { Key, ScrollKey } from '@node-ahk/keys';
 import { getTapKey } from '@node-ahk/utils/scripts';
 import { getCommonScripts } from './commonScripts';
@@ -9,7 +9,7 @@ import { getShifterScript, sixShifterPairs } from './shifterScripts';
 
 
 const main = () => {
-  execScripts([
+  runScripts([
     getScrollScripts({
       scrollUpToggle: Key.THREE,
       scrollDownToggle: Key.FOUR,
