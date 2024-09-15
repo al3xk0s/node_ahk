@@ -4,11 +4,16 @@ __nodeAhk__runComplete() {
     local words="run build"
 
     local subcommand="${COMP_WORDS[1]}"
-    local file_name="*.js"
 
-    [[ "$subcommand" == 'build' ]] && [[ "$prev" == "$subcommand" ]] && file_name="*.ts"
+    local js_file_name="-name \"*.js\""
+    local ts_file_name="-name \"*.ts\""
+    local ts_or_js_file_name="$js_file_name -o $ts_file_name"
 
-    [[ "$subcommand" =~ (run|build) ]] && words="$(find . -name "$file_name" -type f)"
+    local file_name="$js_file_name"
+
+    [[ "$subcommand" == 'build' ]] && [[ "$prev" == "$subcommand" ]] && file_name="$ts_or_js_file_name"
+
+    [[ "$subcommand" =~ (run|build) ]] && words="$(eval "find . $file_name -type f")"
 
     COMPREPLY=($(compgen -W "$words" -- $latest))
     return 0
@@ -35,9 +40,17 @@ function node_ahk__build() {
     local src_file="$1"
     local out="$2"
 
-    [[ -z "$out" ]] && out="$(basename "$src_file")"
+    [[ -z "$out" ]] && out="$(basename "$src_file")"    
 
-    node esbuild.mjs "$src_file" "$out"
+    esbuild \
+        --minify \
+        --bundle \
+        --platform=node \
+        --external:@suchipi/node-mac-permissions \
+        --external:suchibot \
+        --external:esbuild \
+        --outfile="$out" \
+    "$src_file"    
 }
 
 function node-ahk() {

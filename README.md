@@ -13,7 +13,7 @@ npm i -g esbuild@0.20.2
 
 ```bash
 cp .node_ahk_source.sh ~/ && \
-echo "source .node_ahk_source.sh" >> ~/.bashrc && \
+echo "source ~/.node_ahk_source.sh" >> ~/.bashrc && \
 source ~/.bashrc
 ```
 
@@ -29,7 +29,7 @@ source ~/.bashrc
 **Классические комманды:**
 
 + `npm i` - установка зависимостей.
-+ `npm run build` - сборка всего проекта.
++ `npm run build` - сборка bundle библиотеки.
 + `suchibot ./script.js` | `npx suchibot ./script.js` - запуск проекта.
 + `node esbuild.js <source> <out>` - сборка bundle - скрипта.
 
@@ -37,4 +37,6 @@ source ~/.bashrc
 
 ### Шаблон
 
-Для классического скрипта есть [шаблон](./src/scripts/template.ts).
+Для классического скрипта есть шаблоны на [typescript](./templates/template.ts) и [javascript](./templates/template.js).
+
+// https://github.com/egoist/tsup
