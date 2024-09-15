@@ -1,4 +1,8 @@
-__nodeAhk__runComplete() {
+function __nodeAhk__getPackage() {
+    echo "github:al3xk0s/node_ahk#$1"
+}
+
+function __nodeAhk__runComplete() {
     local latest="${COMP_WORDS[$COMP_CWORD]}"
     local prev="${COMP_WORDS[$COMP_CWORD - 1]}"
     local words="run build deploy install"
@@ -25,10 +29,10 @@ function node_ahk__help() {
     echo '
   Subcommands:
 
-    run         ./path/to/script.js
-    build       ./path/to/root.ts [path/to/out.js]
-    deploy      (in node-ahk package dir, to install globaly)
-    install     (to link globaly packages in isolates enviroments)
+    run ./script.js                     ./path/to/script.js
+    build ./script.ts|js [outfile]      ./path/to/root.ts [path/to/out.js]
+    deploy                              (in node-ahk package dir, to install globaly)
+    install [-g | version]              (to link global or github specific version). By default - global.
 '
 }
 
@@ -77,7 +81,20 @@ function node_ahk__deploy() {
 }
 
 function node_ahk__install() {
-    npm link suchibot node-ahk
+    local flag_or_version="$1"
+
+    if [[ -z "$flag_or_version" ]]; then
+        flag_or_version="-g"
+    fi
+
+    if [[ "$flag_or_version" == '-g' ]]; then
+        npm link suchibot node-ahk
+    else
+        npm i "$(__nodeAhk__getPackage "$flag_or_version")"
+        npm link suchibot
+    fi
+
+    return 0
 }
 
 function node-ahk() {
