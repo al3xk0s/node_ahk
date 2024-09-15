@@ -19,7 +19,6 @@
     "typescript": "^5.2.2"
   },
   "dependencies": {
-    "suchibot": "^1.9.0",
     "uuid": "^9.0.1"
   }
 }
