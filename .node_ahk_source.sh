@@ -1,7 +1,7 @@
 __nodeAhk__runComplete() {
     local latest="${COMP_WORDS[$COMP_CWORD]}"
     local prev="${COMP_WORDS[$COMP_CWORD - 1]}"
-    local words="run build"
+    local words="run build deploy"
 
     local subcommand="${COMP_WORDS[1]}"
 
@@ -53,6 +53,24 @@ function node_ahk__build() {
     "$src_file"    
 }
 
+function node_ahk__deploy() {
+    ( [[ ! -f 'package.json' ]] || [[ ! -f 'tsup.config.ts' ]] ) && \
+    echo 'Must be root node_ahk dirrectory' && \
+    return 1
+
+    local name=""
+    local names=()
+
+    npm pack && \
+    names=($(find . -type f -name "node-ahk*.tgz")) && \
+    name="${names[0]}" && \
+    npm i -g "$name"
+
+    rm -f "$name"
+
+    return 0
+}
+
 function node-ahk() {
     local subcommand="$1"
     shift
@@ -62,6 +80,7 @@ function node-ahk() {
     case "$subcommand" in
         build) node_ahk__build "${@}" ;;
         run) node_ahk__run "${@}" ;;
+        deploy) node_ahk__deploy "${@}" ;;
         --help) node_ahk__help ;;
         -h) node_ahk__help ;;
         *) echo ;;

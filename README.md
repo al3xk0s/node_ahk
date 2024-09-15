@@ -25,6 +25,7 @@ source ~/.bashrc
 
 + `node-ahk run ./script.js` - запуск проекта.
 + `node-ahk build <source> [out]` - сборка bundle - скрипта.
++ `node-ahk deploy` - устанавливает node-ahk глобально для пользования в среде node js (в корневой папке проекта).
 
 **Классические комманды:**
 

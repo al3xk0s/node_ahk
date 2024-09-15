@@ -1,13 +1,12 @@
 {
-  "name": "server",
+  "name": "node-ahk",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
-  "scripts": {
-    "install": "npm link suchibot",
+  "main": "dist/index.js",
+  "scripts": {    
     "build-standalone": "tsc",
     "build": "npx tsup-node --config tsup.config.ts src/index.ts"    
-  },
+  },  
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -17,7 +16,8 @@
     "esbuild-plugin-d.ts": "^1.2.3",    
     "ts-node": "^10.9.1",
     "tsup": "^8.2.4",
-    "typescript": "^5.2.2"
+    "typescript": "^5.2.2",
+    "suchibot": "^1.9.2"
   },
   "dependencies": {
     "uuid": "^9.0.1"

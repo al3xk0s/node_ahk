@@ -11,7 +11,7 @@ export default defineConfig({
   target: 'node20',
   minify: true,
   bundle: true,  
-  noExternal: getNoExternals(),
+  noExternal: getNoExternals(),  
   external: [
     '@suchipi/node-mac-permissions',
     'suchibot',
