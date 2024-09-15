@@ -1,3 +1,5 @@
+import { PromiseUtils } from "./promise";
+
 export type TimerProps = {
     durationMs: number;
     onStart?: () => void;
@@ -14,7 +16,8 @@ export const createTimer = ({ durationMs, onStart, onStop }: TimerProps) => {
         if(pid == null) return;
 
         clearTimeout(pid);
-        onStop?.();
+        pid = null;
+
         promise = undefined;
         res?.();
     }
@@ -24,7 +27,7 @@ export const createTimer = ({ durationMs, onStart, onStop }: TimerProps) => {
         onStart?.();
         promise = new Promise((resolve) => {
             res = resolve;
-        });
+        }).then(() => onStop?.());
         
         pid = setTimeout(() => {
             stop();                
@@ -49,11 +52,10 @@ export const createCombinedTimer = ({onStart, onStop}: Omit<TimerProps, 'duratio
         if(isStopped) return;
 
         current?.stop();
-        isStopped = true;
-        onStop?.();
+        isStopped = true;        
     }
 
-    const start = async () => {
+    const _start = async () => {
         stop();
         isStopped = false;
         onStart?.();
@@ -65,6 +67,11 @@ export const createCombinedTimer = ({onStart, onStop}: Omit<TimerProps, 'duratio
         }
 
         stop();
+    }
+
+    const start = async () => {
+        await _start();
+        onStop?.();
     }
 
     return {

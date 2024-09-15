@@ -9,4 +9,6 @@ export abstract class PromiseUtils {
             }, delayMs);
         })
     }
+
+    static readonly microtask = <T>(executor: () => T) => this.delayed(0, executor);
 };
