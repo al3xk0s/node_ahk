@@ -1,7 +1,7 @@
 __nodeAhk__runComplete() {
     local latest="${COMP_WORDS[$COMP_CWORD]}"
     local prev="${COMP_WORDS[$COMP_CWORD - 1]}"
-    local words="run build deploy"
+    local words="run build deploy install"
 
     local subcommand="${COMP_WORDS[1]}"
 
@@ -25,8 +25,10 @@ function node_ahk__help() {
     echo '
   Subcommands:
 
-    run     ./path/to/script.js
-    build   ./path/to/root.ts [path/to/out.js]
+    run         ./path/to/script.js
+    build       ./path/to/root.ts [path/to/out.js]
+    deploy      (in node-ahk package dir, to install globaly)
+    install     (to link globaly packages in isolates enviroments)
 '
 }
 
@@ -40,7 +42,10 @@ function node_ahk__build() {
     local src_file="$1"
     local out="$2"
 
-    [[ -z "$out" ]] && out="$(basename "$src_file")"    
+    local filename="$(basename "$src_file")"
+    filename="${filename%.*}"
+
+    [[ -z "$out" ]] && out="$filename.bundle.js"
 
     esbuild \
         --minify \
@@ -71,6 +76,10 @@ function node_ahk__deploy() {
     return 0
 }
 
+function node_ahk__install() {
+    npm link suchibot node-ahk
+}
+
 function node-ahk() {
     local subcommand="$1"
     shift
@@ -81,6 +90,7 @@ function node-ahk() {
         build) node_ahk__build "${@}" ;;
         run) node_ahk__run "${@}" ;;
         deploy) node_ahk__deploy "${@}" ;;
+        install) node_ahk__install "${@}" ;;
         --help) node_ahk__help ;;
         -h) node_ahk__help ;;
         *) echo ;;

@@ -23,9 +23,10 @@ source ~/.bashrc
 
 Для этого была сделана утилита `node-ahk`:
 
-+ `node-ahk run ./script.js` - запуск проекта.
-+ `node-ahk build <source> [out]` - сборка bundle - скрипта.
-+ `node-ahk deploy` - устанавливает node-ahk глобально для пользования в среде node js (в корневой папке проекта).
++ `node-ahk run ./script.js`        - запуск проекта.
++ `node-ahk build <source> [out]`   - сборка bundle - скрипта (js | ts).
++ `node-ahk deploy`                 - устанавливает node-ahk глобально для пользования в среде node js (в корневой папке проекта).
++ `node-ahk install`                - устанавливает глобальные зависимости локально для запуска из отдельного скрипта (`npm link`).
 
 **Классические комманды:**
 
