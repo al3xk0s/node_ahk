@@ -6,6 +6,11 @@ type ToggleStateByTapProps = {
     key: IPhysicalKey;
 };
 
+/**
+ * Скриптовый вариант {@link IPhysicalKey.onToggleEnabled}.
+ * 
+ * @returns стейт, хранящий состояние кнопки (активное / неактивное).
+ */
 export const toggleStateByTap = ({
     initial = false,
     key,

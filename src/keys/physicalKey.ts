@@ -6,16 +6,36 @@ import { PromiseUtils } from '@node-ahk/shared';
 
 type KeyType = 'keyboard' | 'mouse';
 
-type ToggleEnabledOptions = { initialEnabled?: boolean, onDisable?: ToggleEnabledHandler; };
-export type ToggleEnabledHandler = (state: IBoolState, modifiers: KeyboardModifierKeysState) => void;
+type ToggleOptions = { initialEnabled?: boolean, onDisable?: ToggleHandler; };
+export type ToggleHandler = (state: IBoolState, modifiers: KeyboardModifierKeysState) => void;
 
 interface IPhysicalKeyExt {
-    onToggleEnabled(handler: ToggleEnabledHandler, options?: ToggleEnabledOptions) : Listener;
-    onHold(handler: ToggleEnabledHandler, onDisable?: ToggleEnabledOptions['onDisable']) : Listener;
-    holdTimed(holdTime: number) : Promise<void>;
+    /**
+     * Событие поочередного переключения кнопки из состояний активной / неактивной (1 нажатие - 1 переключение).
+     *      
+     * @param handler вызывается в случае переключения в `активное` состояние.
+     * @param options.initialEnabled позводяет задать начальное состояние.
+     * @param options.onDisable вызывается в случае переключения в `неактивное` состояние.
+     */
+    onToggleEnabled(handler: ToggleHandler, options?: ToggleOptions) : Listener;
+
+    /**
+     * Событие зажатия и отпускания кнопки.
+     *
+     * @param handler вызывается в случае зажатия кнопки.
+     * @param options.onDisable вызывается в случае отпускания кнопки.
+     */
+    onHold(handler: ToggleHandler, options?: Pick<ToggleOptions, 'onDisable'>) : Listener;
+
+    /**
+     * Зажать кнопку на заданное время.
+     * 
+     * @param holdTime время зажатия кноки в миллисекундах.
+     */
+    holdOnTime(holdTime: number) : Promise<void>;
 }
 
-type CreatePhysicalKeyExtProps = {
+type CreatePhysicalKeyExtProps = {    
     onDown: (h: Handler) => Listener;
     onUp: (h: Handler) => Listener;
     hold: () => void;
@@ -35,10 +55,10 @@ const _physicalKeyExt = ({
             return onDown((m) => {
                 state.toggle();
                 if(state.isEnabled) return handler(state, m);
-                if(onDisable != null) return onDisable(state, m);
+                return onDisable?.(state, m);
             });
         },
-        onHold: (handler, onDisable) => {
+        onHold: (handler, { onDisable } = {}) => {
             const state = BoolState(false);
 
             return combineListeners([
@@ -55,7 +75,7 @@ const _physicalKeyExt = ({
                 }),
             ]);
         },
-        holdTimed: async (time) => {
+        holdOnTime: async (time) => {
             hold();
             await PromiseUtils.delayed(time);
             release();

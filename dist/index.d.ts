@@ -1,4 +1,5 @@
 import { Key as Key$1, MouseButton, KeyboardModifierKeysState, MouseEvent } from 'suchibot';
+export { sleep } from 'suchibot';
 
 interface IStream<T> {
     map<V>(mapper: (value: T, index: number) => V): IStream<V>;
@@ -45,6 +46,7 @@ declare abstract class StringUtils {
 declare abstract class PromiseUtils {
     private constructor();
     static readonly delayed: <T>(delayMs: number, executor?: () => T) => Promise<any>;
+    static readonly microtask: <T>(executor: () => T) => Promise<any>;
 }
 
 type TimerProps = {
@@ -57,7 +59,7 @@ declare const createTimer: ({ durationMs, onStart, onStop }: TimerProps) => {
     stop: () => void;
 };
 type Timer = ReturnType<typeof createTimer>;
-declare const createCombinedTimer: ({ onStart, onStop }: Omit<TimerProps, "durationMs">, ...timers: Timer[]) => Timer;
+declare const createTimerSequence: ({ onStart, onStop }: Omit<TimerProps, "durationMs">, ...timers: Timer[]) => Timer;
 
 type ICast<T> = ReturnType<typeof Cast<T>>;
 declare const Cast: <T>(value: any, match: (value: any) => boolean, typeName: string) => {
@@ -140,17 +142,50 @@ type KeyByKeyProps<B = IPhysicalKey, T = IKey> = {
     then: T;
 } & WhenKeyProps<B>;
 
+/**
+ * @param when - переключает состояние скрипта (активное / неактивное).
+ * @param then - при активном состоянии будет зажата.
+ */
 declare const holdKey: ({ when, then }: KeyByKeyProps<IPhysicalKey, IPhysicalKey>) => Listener;
+/**
+ * Версия со встроенной документацией.
+ *
+ * @returns функция {@link holdKey}.
+ */
 declare const getHoldKey: (args_0: KeyByKeyProps<IPhysicalKey<SuchKey | SuchMouseKey>, IPhysicalKey<SuchKey | SuchMouseKey>>) => ScriptWithDoc<Listener>;
 
+/**
+ * По нажатию на `when` происходит нажатие клавиши `then`.
+ */
 declare const tapKey: ({ when, then }: KeyByKeyProps<IPhysicalKey, IKey>) => Listener;
+/**
+ * Версия с документацией.
+ *
+ * @returns функция {@link tapKey}.
+ */
 declare const getTapKey: (args_0: KeyByKeyProps<IPhysicalKey<SuchKey | SuchMouseKey>, IKey>) => ScriptWithDoc<Listener>;
 
 type TickKeyProps = {
     delayMs?: number;
 } & KeyByKeyProps<IPhysicalKey, IKey>;
+/**
+ * @param when переключает состояние скрипта (активное / неактивное).
+ * @param then при активном состоянии скрипта с определенной периодичностью совершаются нажатия.
+ * @param delayMs задержка между тиками.
+ */
 declare const tickKey: ({ when, then, delayMs, }: TickKeyProps) => Listener;
+/**
+ * Версия с документацией.
+ *
+ * @returns функция {@link tickKey}
+ */
 declare const getTickKey: (args_0: TickKeyProps) => ScriptWithDoc<Listener>;
+/**
+ * @param activate переключает состояние между активным / неактивным.
+ * @param when в случае активного состояния, при зажатии клавиши происходит многократное нажатие `then`.
+ *
+ * @returns функция с документацией.
+ */
 declare const getTickByHold: (args_0: {
     then: IKey;
 } & WhenKeyProps<IPhysicalKey<SuchKey | SuchMouseKey>> & {
@@ -161,6 +196,11 @@ type ToggleStateByTapProps = {
     initial?: boolean;
     key: IPhysicalKey;
 };
+/**
+ * Скриптовый вариант {@link IPhysicalKey.onToggleEnabled}.
+ *
+ * @returns стейт, хранящий состояние кнопки (активное / неактивное).
+ */
 declare const toggleStateByTap: ({ initial, key, }: ToggleStateByTapProps) => IBoolState;
 
 type ContinuePredicate = (count: number) => boolean;
@@ -174,10 +214,22 @@ type BasicWhileNeedProps = {
     execute: () => any;
 } & WhilePredicateProps;
 type WhileNeedProps = BasicWhileNeedProps & WhileAsyncProps;
+/**
+ * Выполнение определенного действия, пока выполняется условие.
+ *
+ * @param needContinue функция, вызывающаяся каждую итерацию цикла.
+ * @param execute выполняемое действие.
+ * @param delayMs задержка после выполнения действия.
+ */
 declare const whileNeed: ({ needContinue, execute, delayMs, }: WhileNeedProps) => Promise<void>;
 type WhileNeedAsyncProps = {
     execute: () => Promise<any>;
 } & BasicWhileNeedProps & WhileAsyncProps;
+/**
+ * Выполнение асинхронного действия, пока выполняется условие.
+ *
+ * Является аналогом {@link whileNeed}.
+ */
 declare const whileNeedAsync: ({ needContinue, execute, delayMs, }: WhileNeedAsyncProps) => Promise<void>;
 
 type Listener = {
@@ -209,15 +261,33 @@ interface IScrollAsKey extends IKey {
 }
 
 type KeyType = 'keyboard' | 'mouse';
-type ToggleEnabledOptions = {
+type ToggleOptions = {
     initialEnabled?: boolean;
-    onDisable?: ToggleEnabledHandler;
+    onDisable?: ToggleHandler;
 };
-type ToggleEnabledHandler = (state: IBoolState, modifiers: KeyboardModifierKeysState) => void;
+type ToggleHandler = (state: IBoolState, modifiers: KeyboardModifierKeysState) => void;
 interface IPhysicalKeyExt {
-    onToggleEnabled(handler: ToggleEnabledHandler, options?: ToggleEnabledOptions): Listener;
-    onHold(handler: ToggleEnabledHandler, onDisable?: ToggleEnabledOptions['onDisable']): Listener;
-    holdTimed(holdTime: number): Promise<void>;
+    /**
+     * Событие поочередного переключения кнопки из состояний активной / неактивной (1 нажатие - 1 переключение).
+     *
+     * @param handler вызывается в случае переключения в `активное` состояние.
+     * @param options.initialEnabled позводяет задать начальное состояние.
+     * @param options.onDisable вызывается в случае переключения в `неактивное` состояние.
+     */
+    onToggleEnabled(handler: ToggleHandler, options?: ToggleOptions): Listener;
+    /**
+     * Событие зажатия и отпускания кнопки.
+     *
+     * @param handler вызывается в случае зажатия кнопки.
+     * @param options.onDisable вызывается в случае отпускания кнопки.
+     */
+    onHold(handler: ToggleHandler, options?: Pick<ToggleOptions, 'onDisable'>): Listener;
+    /**
+     * Зажать кнопку на заданное время.
+     *
+     * @param holdTime время зажатия кноки в миллисекундах.
+     */
+    holdOnTime(holdTime: number): Promise<void>;
 }
 interface IPhysicalKey<T extends SuchKey | SuchMouseKey = SuchKey | SuchMouseKey> extends IKey, IPhysicalKeyExt {
     onDown(handler: Handler): Listener;
@@ -377,7 +447,7 @@ type WithDoc = {
     doc: AnyDoc;
 };
 type AnyDoc = string | string[] | WithDoc | WithDoc[];
-declare const doc: {
+declare const DocUtils: {
     holdKey: ({ when, then }: KeyByKeyProps<IPhysicalKey, IPhysicalKey>) => string;
     tapKey: ({ when, then }: KeyByKeyProps<IPhysicalKey, IKey>) => string;
     tickKey: ({ when, then }: KeyByKeyProps<IPhysicalKey, IKey>) => string;
@@ -391,6 +461,9 @@ declare const doc: {
     isWithDoc: (docs: AnyDoc) => boolean;
 };
 
+/**
+ * Скрипт с документацией в паре.
+ */
 type ScriptWithDoc<T = Listener> = {
     (): T;
 } & WithDoc;
@@ -398,9 +471,15 @@ type WrapToDocNamedProps<F extends (...args: Parameters<F>) => ReturnType<F>> = 
     getDoc: (...args: Parameters<F>) => AnyDoc;
 };
 declare const wrapToScriptWithDoc: <F extends (...args: Parameters<F>) => ReturnType<F>>(foo: F, { getDoc }: WrapToDocNamedProps<F>) => ((...args: Parameters<F>) => ScriptWithDoc<ReturnType<F>>);
+/**
+ * Объединяет несколько скриптов в один скрипт.
+ */
 declare const combineScriptsWithDoc: (scripts: ScriptWithDoc<void | (() => void) | Listener>[]) => (() => Listener) & {
     doc: string[];
 };
+/**
+ * Запускает скрипты с печатью документации.
+ */
 declare const runScripts: (scripts: ScriptWithDoc<any>[]) => void;
 
-export { type AnyDoc, BoolState, BoolStateCompose, Cast, DisposeWrapper, type Disposer, type Handler, type IBoolState, type ICast, type IDisposable, type IDisposeWrapper, type IKey, type IKeyboardKey, type IListenable, type IMouseKey, type IObservable, type IPhysicalKey, type IQueue, type IRx, type IStream, Key, type KeyByKeyProps, type Listener as KeyListener, type Listener$1 as Listener, MouseKey, Observable, PromiseUtils, Queue, Rx, type RxOptions, type ScriptWithDoc, ScrollDirection, ScrollKey, StringUtils, SuchKey, SuchMouseKey, type Timer, type TimerProps, type WhenKeyProps, type WhileAsyncProps, type WhilePredicateProps, type WithDoc, combineDisposers, combineListeners, combineScriptsWithDoc, createCombinedTimer, createTimer, doc, force, getHoldKey, getTapKey, getTickByHold, getTickKey, holdKey, inOfAny, runScripts, stream, tapKey, tickKey, toDisposer, toListener, toggleStateByTap, whileNeed, whileNeedAsync, wrapToScriptWithDoc };
+export { type AnyDoc, BoolState, BoolStateCompose, Cast, DisposeWrapper, type Disposer, DocUtils, type Handler, type IBoolState, type ICast, type IDisposable, type IDisposeWrapper, type IKey, type IKeyboardKey, type IListenable, type IMouseKey, type IObservable, type IPhysicalKey, type IQueue, type IRx, type IStream, Key, type KeyByKeyProps, type Listener as KeyListener, type Listener$1 as Listener, MouseKey, Observable, PromiseUtils, Queue, Rx, type RxOptions, type ScriptWithDoc, ScrollDirection, ScrollKey, StringUtils, SuchKey, SuchMouseKey, type Timer, type TimerProps, type WhenKeyProps, type WhileAsyncProps, type WhilePredicateProps, type WithDoc, combineDisposers, combineListeners, combineScriptsWithDoc, createTimer, createTimerSequence, force, getHoldKey, getTapKey, getTickByHold, getTickKey, holdKey, inOfAny, runScripts, stream, tapKey, tickKey, toDisposer, toListener, toggleStateByTap, whileNeed, whileNeedAsync, wrapToScriptWithDoc };

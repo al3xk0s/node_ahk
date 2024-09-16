@@ -1,4 +1,4 @@
-import { sleep } from 'suchibot';
+import { sleep } from '@node-ahk/utils';
 
 export type ContinuePredicate = (count: number) => boolean;
 export type WhileAsyncProps = { delayMs?: number; }
@@ -12,6 +12,13 @@ type WhileNeedProps = BasicWhileNeedProps & WhileAsyncProps;
 
 const _delay = 100;
 
+/**
+ * Выполнение определенного действия, пока выполняется условие.
+ * 
+ * @param needContinue функция, вызывающаяся каждую итерацию цикла.
+ * @param execute выполняемое действие.
+ * @param delayMs задержка после выполнения действия.
+ */
 export const whileNeed = async ({
     needContinue,
     execute,
@@ -30,6 +37,11 @@ type WhileNeedAsyncProps = {
     execute: () => Promise<any>;
 } & BasicWhileNeedProps & WhileAsyncProps;
 
+/**
+ * Выполнение асинхронного действия, пока выполняется условие.
+ * 
+ * Является аналогом {@link whileNeed}.
+ */
 export const whileNeedAsync = async ({
     needContinue,
     execute,

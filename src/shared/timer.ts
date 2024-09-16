@@ -44,7 +44,7 @@ export const createTimer = ({ durationMs, onStart, onStop }: TimerProps) => {
 
 export type Timer = ReturnType<typeof createTimer>;
 
-export const createCombinedTimer = ({onStart, onStop}: Omit<TimerProps, 'durationMs'>, ...timers: Timer[]) : Timer => {
+export const createTimerSequence = ({onStart, onStop}: Omit<TimerProps, 'durationMs'>, ...timers: Timer[]) : Timer => {
     let current : Timer | undefined;
     let isStopped = true;
 

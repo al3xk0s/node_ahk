@@ -2,6 +2,7 @@ import { KeyListener } from "@node-ahk/keys"
 import { inOfAny } from "@node-ahk/shared/operators";
 import { DisposeWrapper, Disposer } from "@node-ahk/shared/rx";
 
+
 export const toDisposer = (res: any) : Disposer  => {
     if(typeof res === 'function') return () => void res();
     if(inOfAny('stop', res)) return () => (res as KeyListener).stop();

@@ -11,14 +11,14 @@ export default defineConfig({
   target: 'node20',
   minify: true,
   bundle: true,  
-  noExternal: getNoExternals(),  
+  noExternal: getNoExternals(),
   external: [
     '@suchipi/node-mac-permissions',
     'suchibot',
     'esbuild',
   ],
   dts: {
-    resolve: true,
+    resolve: true,        
     entry: './src/index.ts',
   },
 });

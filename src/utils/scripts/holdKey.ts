@@ -1,7 +1,11 @@
 import { IPhysicalKey } from "@node-ahk/keys";
-import { doc, wrapToScriptWithDoc } from "@node-ahk/docScript";
+import { DocUtils, wrapToScriptWithDoc } from "@node-ahk/docScript";
 import { KeyByKeyProps } from "./types";
 
+/**
+ * @param when - переключает состояние скрипта (активное / неактивное).
+ * @param then - при активном состоянии будет зажата.
+ */
 export const holdKey = ({
   when,
   then
@@ -15,7 +19,12 @@ export const holdKey = ({
   })
 }
 
+/**
+ * Версия со встроенной документацией.
+ * 
+ * @returns функция {@link holdKey}.
+ */
 export const getHoldKey = wrapToScriptWithDoc(
   holdKey, {
-  getDoc: ps => doc.holdKey(ps),
+  getDoc: ps => DocUtils.holdKey(ps),
 });

@@ -1,6 +1,6 @@
-import { KeyboardModifierKeysState, sleep } from 'suchibot';
+import { KeyboardModifierKeysState } from 'suchibot';
 import { WhileAsyncProps, WhilePredicateProps } from '@node-ahk/utils/scripts';
-import { toListener } from '@node-ahk/utils';
+import { toListener, sleep } from '@node-ahk/utils';
 import { BoolState } from '@node-ahk/shared/rx';
 
 export type Listener = { stop: () => any }

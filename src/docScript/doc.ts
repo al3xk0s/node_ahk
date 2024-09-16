@@ -8,7 +8,7 @@ export type WithDoc = {
 
 export type AnyDoc = string | string[] | WithDoc | WithDoc[];
 
-export const doc = (() => {
+export const DocUtils = (() => {
     const activate = (key: IKey) => `activate ${key.toString()}`;
     const tap = (key: IKey) => `tap ${key.toString()}`;
     const hold = (key: IKey) => `hold ${key.toString()}`;

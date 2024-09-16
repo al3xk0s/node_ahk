@@ -1,2 +1,2 @@
-export { doc, WithDoc, AnyDoc } from './doc';
+export { DocUtils, WithDoc, AnyDoc } from './doc';
 export { ScriptWithDoc, runScripts, combineScriptsWithDoc, wrapToScriptWithDoc } from './scriptWithDoc';

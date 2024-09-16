@@ -1,4 +1,4 @@
-import {getTickByHold , Key } from '../dist/index';
+import { getTickByHold, Key } from '../dist/index';
 
 const main = () => {
     getTickByHold({

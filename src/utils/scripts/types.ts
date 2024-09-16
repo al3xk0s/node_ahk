@@ -7,4 +7,3 @@ export type WhenKeyProps<B = IPhysicalKey> = {
 export type KeyByKeyProps<B = IPhysicalKey, T = IKey> = {
     then: T;
 } & WhenKeyProps<B>;
-
