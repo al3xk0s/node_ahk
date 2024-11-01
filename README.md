@@ -41,4 +41,14 @@ source ~/.bashrc
 
 Для классического скрипта есть шаблоны на [typescript](./templates/template.ts) и [javascript](./templates/template.js).
 
-// https://github.com/egoist/tsup
+### Todo [x]
+
+- [ ] Реализовать улов скролла на linux ref: https://gist.github.com/bfncs/2020943.
+- [ ] Реализовать улов скролла на windows ref: https://github.com/xanderfrangos/global-mouse-events.
+
+## Спасибо
+
+- Ядро проекта: [suchibot](https://github.com/suchipi/suchibot).
+- Сборка библиотеки в bundle: [tsup](https://github.com/egoist/tsup).
+- Идеи для отлова мыши на linux: [bfncs](https://gist.github.com/bfncs/2020943).
+- Отлов мыши на windows: [global-mouse-events](https://github.com/xanderfrangos/global-mouse-events).
