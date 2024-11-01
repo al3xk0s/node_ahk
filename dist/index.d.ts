@@ -443,6 +443,30 @@ declare const ScrollKey: {
     DOWN: (step?: number) => IScrollAsKey;
 };
 
+type CursorPosition = {
+    x: number;
+    y: number;
+};
+type CursorOffset = Pick<CursorPosition, 'x' | 'y'>;
+type CursorMoveHandler = (position: CursorPosition, modifiers: KeyboardModifierKeysState, ev: MouseEvent) => void;
+interface ICursor {
+    /**
+     * Подвинуть курсор на позицию {position}.
+     *
+     * @param position
+     */
+    moveTo(position: Partial<CursorPosition>): void;
+    /**
+     * Подвинуть курсор относительно текущей позиции.
+     *
+     * @param offset сдвиг, относительно которого необходимо переместить курсор.
+     */
+    move(offset: Partial<CursorOffset>): void;
+    onMove(handler: CursorMoveHandler): Listener;
+    getPosition(): CursorPosition;
+}
+declare const Cursor: ICursor;
+
 type WithDoc = {
     doc: AnyDoc;
 };
@@ -482,4 +506,4 @@ declare const combineScriptsWithDoc: (scripts: ScriptWithDoc<void | (() => void)
  */
 declare const runScripts: (scripts: ScriptWithDoc<any>[]) => void;
 
-export { type AnyDoc, BoolState, BoolStateCompose, Cast, DisposeWrapper, type Disposer, DocUtils, type Handler, type IBoolState, type ICast, type IDisposable, type IDisposeWrapper, type IKey, type IKeyboardKey, type IListenable, type IMouseKey, type IObservable, type IPhysicalKey, type IQueue, type IRx, type IStream, Key, type KeyByKeyProps, type Listener as KeyListener, type Listener$1 as Listener, MouseKey, Observable, PromiseUtils, Queue, Rx, type RxOptions, type ScriptWithDoc, ScrollDirection, ScrollKey, StringUtils, SuchKey, SuchMouseKey, type Timer, type TimerProps, type WhenKeyProps, type WhileAsyncProps, type WhilePredicateProps, type WithDoc, combineDisposers, combineListeners, combineScriptsWithDoc, createTimer, createTimerSequence, force, getHoldKey, getTapKey, getTickByHold, getTickKey, holdKey, inOfAny, runScripts, stream, tapKey, tickKey, toDisposer, toListener, toggleStateByTap, whileNeed, whileNeedAsync, wrapToScriptWithDoc };
+export { type AnyDoc, BoolState, BoolStateCompose, Cast, Cursor, DisposeWrapper, type Disposer, DocUtils, type Handler, type IBoolState, type ICast, type ICursor, type IDisposable, type IDisposeWrapper, type IKey, type IKeyboardKey, type IListenable, type IMouseKey, type IObservable, type IPhysicalKey, type IQueue, type IRx, type IStream, Key, type KeyByKeyProps, type Listener as KeyListener, type Listener$1 as Listener, MouseKey, Observable, PromiseUtils, Queue, Rx, type RxOptions, type ScriptWithDoc, ScrollDirection, ScrollKey, StringUtils, SuchKey, SuchMouseKey, type Timer, type TimerProps, type WhenKeyProps, type WhileAsyncProps, type WhilePredicateProps, type WithDoc, combineDisposers, combineListeners, combineScriptsWithDoc, createTimer, createTimerSequence, force, getHoldKey, getTapKey, getTickByHold, getTickKey, holdKey, inOfAny, runScripts, stream, tapKey, tickKey, toDisposer, toListener, toggleStateByTap, whileNeed, whileNeedAsync, wrapToScriptWithDoc };
