@@ -43,3 +43,8 @@ export const runScripts = (scripts: ScriptWithDoc<any>[]) => {
     scripts.forEach(s => s());
     scripts.forEach(s => DocUtils.print(s));
 }
+
+/**
+ * Запускает скрипт с печатью документации.
+ */
+export const runScript = (script: ScriptWithDoc<any>) => runScripts([script]);
