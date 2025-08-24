@@ -1,5 +1,5 @@
 import { SuchKey as K, SuchMouseKey as MK } from "@node-ahk/utils";
-import { IKeyboardKey, IMouseKey, _PhysicalKeyboardKey, _PhysicalMouseKey } from "./physicalKey";
+import { IKeyboardKey, IMouseKey, _PhysicalKeyboardKey, _PhysicalMouseKey, _PhysicalKeySequence } from "./physicalKey";
 import { ScrollDownAsKey, ScrollUpAsKey } from "./scrollAsKey";
 
 export const Key = (() => {
@@ -21,6 +21,8 @@ export const MouseKey = (() => {
 
     return keys as { [k in keyof typeof MK]: IMouseKey }
 })();
+
+export const KeysSequence = _PhysicalKeySequence;
 
 export const ScrollKey = {
     UP: ScrollUpAsKey,

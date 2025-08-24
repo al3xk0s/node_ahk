@@ -1,6 +1,6 @@
 import { MouseEvent, Keyboard, Mouse, KeyboardModifierKeysState } from 'suchibot';
-import { BoolState, IBoolState } from '@node-ahk/shared/rx';
-import { SuchKey, SuchMouseKey, combineListeners } from '@node-ahk/utils';
+import { BoolState, IBoolState, IObservable, Observable } from '@node-ahk/shared/rx';
+import { SuchKey, SuchMouseKey, combineListeners, toListener } from '@node-ahk/utils';
 import { Handler, IKey, Listener, _commonKeyExt } from './key';
 import { PromiseUtils } from '@node-ahk/shared';
 
@@ -151,3 +151,104 @@ export const _PhysicalMouseKey = (key: SuchMouseKey) : IMouseKey => {
         toString: () => `${key} (mouse)`
     }
 }
+
+export interface IPhysicalKeySequence<T extends SuchKey | SuchMouseKey = SuchKey | SuchMouseKey> extends IPhysicalKey<T> {
+
+}
+
+const DefaultModifierKeysState = {
+    alt: false,
+    control: false,
+    shift: false,
+    super: false,
+    windows: false,
+    command: false,
+    meta: false,
+    leftAlt: false,
+    leftControl: false,
+    leftShift: false,
+    leftSuper: false,
+    leftWindows: false,
+    leftCommand: false,
+    leftMeta: false,
+    rightAlt: false,
+    rightControl: false,
+    rightShift: false,
+    rightSuper: false,
+    rightWindows: false,
+    rightCommand: false,
+    rightMeta: false,
+}
+
+export const _PhysicalKeySequence = <
+    T extends SuchKey | SuchMouseKey = SuchKey | SuchMouseKey
+>(keys: IPhysicalKey<T>[]) : IPhysicalKeySequence<T> => {
+    if(keys.length <= 0) throw new Error('Empty key sequence');
+
+    const tap = () => keys.forEach(k => k.tap());
+    const hold = () => keys.forEach(k => k.hold());
+    const release = () => keys.forEach(k => k.release());
+
+    const onDownOrUp = (
+        handler: Handler,
+        defaultCaller: (key: IPhysicalKey) => Listener,
+        getListeners: (key: IPhysicalKey, keys: IPhysicalKey[], obs: IObservable<boolean>) => Listener[]
+    ): Listener => {
+        const firstKey = keys[0];
+        const secondKeys = keys.slice(1);
+
+        if(secondKeys.length == 0) return defaultCaller(firstKey);
+
+        const obs = Observable<boolean>();
+
+        const firstKeyListeners = getListeners(firstKey, secondKeys, obs)
+
+        return combineListeners([
+            ...firstKeyListeners,
+            toListener(
+                obs.listen((value) => {
+                    if(value) handler(DefaultModifierKeysState);
+                })
+            )
+        ]);
+    }
+
+    const onDown = (handler: Handler) : Listener =>
+        onDownOrUp(handler, (key) => key.onDown(handler), (key, keys, obs) => [
+            key.onDown(() => {
+                obs.notify(keys.every(k => k.isDown));
+            }),
+            key.onUp(() => {
+                obs.notify(false);
+            }),
+        ]);
+
+    const onUp = (handler: Handler) : Listener =>
+        onDownOrUp(handler, (key) => key.onUp(handler), (key, keys, obs) => [
+            key.onDown(() => {
+                obs.notify(false);
+            }),
+            key.onUp(() => {
+                obs.notify(keys.every(k => k.isDown));
+            }),
+        ]);
+
+    const keysToString = () =>
+        keys.map(k => k.value).join(' + ');
+
+    return {
+        isDown: () => keys.every(k => k.isDown()),
+        isUp: () => keys.every(k => k.isUp()),
+        onDown,
+        onUp,
+        tap,
+        hold,
+        release,
+        get value() { return keysToString() as T },
+        ..._commonKeyExt(tap),
+        ..._physicalKeyExt({hold, release, onDown, onUp}),
+        type: 'keyboard',
+        toString: () => `${keysToString()}`
+    }
+}
+

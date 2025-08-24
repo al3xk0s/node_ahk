@@ -304,6 +304,8 @@ interface IMouseKey extends IPhysicalKey<SuchMouseKey> {
     onClick(handler: (event: MouseEvent) => void): Listener;
     doubleClick(): void;
 }
+interface IPhysicalKeySequence<T extends SuchKey | SuchMouseKey = SuchKey | SuchMouseKey> extends IPhysicalKey<T> {
+}
 
 declare const Key: {
     BACKSPACE: IKeyboardKey;
@@ -438,6 +440,7 @@ declare const MouseKey: {
     MOUSE5: IMouseKey;
     ANY: IMouseKey;
 };
+declare const KeysSequence: <T extends SuchKey | SuchMouseKey = SuchKey | SuchMouseKey>(keys: IPhysicalKey<T>[]) => IPhysicalKeySequence<T>;
 declare const ScrollKey: {
     UP: (step?: number) => IScrollAsKey;
     DOWN: (step?: number) => IScrollAsKey;
@@ -510,4 +513,4 @@ declare const runScripts: (scripts: ScriptWithDoc<any>[]) => void;
  */
 declare const runScript: (script: ScriptWithDoc<any>) => void;
 
-export { type AnyDoc, BoolState, BoolStateCompose, Cast, Cursor, DisposeWrapper, type Disposer, DocUtils, type Handler, type IBoolState, type ICast, type ICursor, type IDisposable, type IDisposeWrapper, type IKey, type IKeyboardKey, type IListenable, type IMouseKey, type IObservable, type IPhysicalKey, type IQueue, type IRx, type IStream, Key, type KeyByKeyProps, type Listener as KeyListener, type Listener$1 as Listener, MouseKey, Observable, PromiseUtils, Queue, Rx, type RxOptions, type ScriptWithDoc, ScrollDirection, ScrollKey, StringUtils, SuchKey, SuchMouseKey, type Timer, type TimerProps, type WhenKeyProps, type WhileAsyncProps, type WhilePredicateProps, type WithDoc, combineDisposers, combineListeners, combineScriptsWithDoc, createTimer, createTimerSequence, force, getHoldKey, getTapKey, getTickByHold, getTickKey, holdKey, inOfAny, runScript, runScripts, stream, tapKey, tickKey, toDisposer, toListener, toggleStateByTap, whileNeed, whileNeedAsync, wrapToScriptWithDoc };
+export { type AnyDoc, BoolState, BoolStateCompose, Cast, Cursor, DisposeWrapper, type Disposer, DocUtils, type Handler, type IBoolState, type ICast, type ICursor, type IDisposable, type IDisposeWrapper, type IKey, type IKeyboardKey, type IListenable, type IMouseKey, type IObservable, type IPhysicalKey, type IQueue, type IRx, type IStream, Key, type KeyByKeyProps, type Listener as KeyListener, KeysSequence, type Listener$1 as Listener, MouseKey, Observable, PromiseUtils, Queue, Rx, type RxOptions, type ScriptWithDoc, ScrollDirection, ScrollKey, StringUtils, SuchKey, SuchMouseKey, type Timer, type TimerProps, type WhenKeyProps, type WhileAsyncProps, type WhilePredicateProps, type WithDoc, combineDisposers, combineListeners, combineScriptsWithDoc, createTimer, createTimerSequence, force, getHoldKey, getTapKey, getTickByHold, getTickKey, holdKey, inOfAny, runScript, runScripts, stream, tapKey, tickKey, toDisposer, toListener, toggleStateByTap, whileNeed, whileNeedAsync, wrapToScriptWithDoc };
