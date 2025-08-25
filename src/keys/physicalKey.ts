@@ -189,49 +189,26 @@ export const _PhysicalKeySequence = <
     const hold = () => keys.forEach(k => k.hold());
     const release = () => keys.forEach(k => k.release());
 
-    const onDownOrUp = (
+    const onWatchChanges = (
         handler: Handler,
-        defaultCaller: (key: IPhysicalKey) => Listener,
-        getListeners: (key: IPhysicalKey, keys: IPhysicalKey[], obs: IObservable<boolean>) => Listener[]
-    ): Listener => {
+        getEvent: (key: IPhysicalKey) => IPhysicalKey['onDown'],
+        isValidKeyCondition: (key: IPhysicalKey) => boolean
+    ) : Listener => {
         const firstKey = keys[0];
         const secondKeys = keys.slice(1);
 
-        if(secondKeys.length == 0) return defaultCaller(firstKey);
+        if(secondKeys.length == 0) return getEvent(firstKey)(handler);
 
-        const obs = Observable<boolean>();
-
-        const firstKeyListeners = getListeners(firstKey, secondKeys, obs)
-
-        return combineListeners([
-            ...firstKeyListeners,
-            toListener(
-                obs.listen((value) => {
-                    if(value) handler(DefaultModifierKeysState);
-                })
-            )
-        ]);
+        return getEvent(firstKey)(() => {
+            if(secondKeys.every(isValidKeyCondition)) handler(DefaultModifierKeysState);
+        });
     }
 
     const onDown = (handler: Handler) : Listener =>
-        onDownOrUp(handler, (key) => key.onDown(handler), (key, keys, obs) => [
-            key.onDown(() => {
-                obs.notify(keys.every(k => k.isDown));
-            }),
-            key.onUp(() => {
-                obs.notify(false);
-            }),
-        ]);
+        onWatchChanges(handler, key => key.onDown, key => key.isDown());
 
     const onUp = (handler: Handler) : Listener =>
-        onDownOrUp(handler, (key) => key.onUp(handler), (key, keys, obs) => [
-            key.onDown(() => {
-                obs.notify(false);
-            }),
-            key.onUp(() => {
-                obs.notify(keys.every(k => k.isDown));
-            }),
-        ]);
+        onWatchChanges(handler, key => key.onUp, key => key.isUp());
 
     const keysToString = () =>
         keys.map(k => k.value).join(' + ');
