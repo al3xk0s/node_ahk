@@ -41,6 +41,10 @@ source ~/.bashrc
 
 Для классического скрипта есть шаблоны на [typescript](./templates/template.ts) и [javascript](./templates/template.js).
 
+### Документация
+
+Актуальная документация находится в файле [`doc.md`](./doc.md).
+
 ### Todo [x]
 
 - [ ] Реализовать улов скролла на linux ref: https://gist.github.com/bfncs/2020943.
