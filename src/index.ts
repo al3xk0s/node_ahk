@@ -4,5 +4,6 @@ export * from './shared/rx';
 
 export * from './docScript';
 export * from './keys';
-export * from './utils/scripts'
+export * from './utils/scripts';
+export * from './utils/easing';
 export * from './utils';

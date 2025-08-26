@@ -446,17 +446,68 @@ declare const ScrollKey: {
     DOWN: (step?: number) => IScrollAsKey;
 };
 
+/**
+ * Функция преобразования x [0; 1] в t [0; 1].
+ */
+type EasingFunction = (x: number) => number;
+/**
+ * https://easings.net
+ */
+declare const EasingFunctions: {
+    easeInSine: (x: number) => number;
+    easeOutSine: (x: number) => number;
+    easeInOutSine: (x: number) => number;
+    easeInQuad: (x: number) => number;
+    easeOutQuad: (x: number) => number;
+    easeInOutQuad: (x: number) => number;
+    easeInCubic: (x: number) => number;
+    easeOutCubic: (x: number) => number;
+    easeInOutCubic: (x: number) => number;
+    easeInQuart: (x: number) => number;
+    easeOutQuart: (x: number) => number;
+    easeInOutQuart: (x: number) => number;
+    easeInQuint: (x: number) => number;
+    easeOutQuint: (x: number) => number;
+    easeInOutQuint: (x: number) => number;
+    easeInExpo: (x: number) => number;
+    easeOutExpo: (x: number) => number;
+    easeInOutExpo: (x: number) => number;
+    easeInCirc: (x: number) => number;
+    easeOutCirc: (x: number) => number;
+    easeInOutCirc: (x: number) => number;
+    easeInBack: (x: number) => number;
+    easeOutBack: (x: number) => number;
+    easeInOutBack: (x: number) => number;
+    easeInElastic: (x: number) => number;
+    easeOutElastic: (x: number) => number;
+    easeInOutElastic: (x: number) => number;
+    easeOutBounce: (x: number) => number;
+    easeInBounce: (x: number) => number;
+    easeInOutBounce: (x: number) => number;
+    linear: (x: number) => number;
+};
+
 type CursorPosition = {
     x: number;
     y: number;
 };
 type CursorOffset = Pick<CursorPosition, 'x' | 'y'>;
 type CursorMoveHandler = (position: CursorPosition, modifiers: KeyboardModifierKeysState, ev: MouseEvent) => void;
+type CursorEaseProps = {
+    /**
+     * Продолжительность движения в миллисекундах.
+     */
+    durationMs: number;
+    /**
+     * Функция сглаживания движения (linear - по-умолчанию).
+     */
+    easing?: EasingFunction;
+};
 interface ICursor {
     /**
      * Подвинуть курсор на позицию {position}.
      *
-     * @param position
+     * @param position новая позиция
      */
     moveTo(position: Partial<CursorPosition>): void;
     /**
@@ -465,6 +516,26 @@ interface ICursor {
      * @param offset сдвиг, относительно которого необходимо переместить курсор.
      */
     move(offset: Partial<CursorOffset>): void;
+    /**
+     * Плавно подвинуть курсор на позицию {props.position}.
+     *
+     * @param props.position новая позиция
+     * @param props.durationMs продолжительность движения в миллисекундах.
+     * @param props.easing функция сглаживания движения (linear - по-умолчанию).
+     */
+    moveToEase(props: {
+        position: Partial<CursorPosition>;
+    } & CursorEaseProps): Promise<void>;
+    /**
+     * Плавно подвинуть курсор относительно текущей позиции.
+     *
+     * @param props.offset сдвиг, относительно которого необходимо переместить курсор.
+     * @param props.durationMs продолжительность движения в миллисекундах.
+     * @param props.easing функция сглаживания движения (linear - по-умолчанию).
+     */
+    moveEase(props: {
+        offset: Partial<CursorOffset>;
+    } & CursorEaseProps): Promise<void>;
     onMove(handler: CursorMoveHandler): Listener;
     getPosition(): CursorPosition;
 }
@@ -513,4 +584,4 @@ declare const runScripts: (scripts: ScriptWithDoc<any>[]) => void;
  */
 declare const runScript: (script: ScriptWithDoc<any>) => void;
 
-export { type AnyDoc, BoolState, BoolStateCompose, Cast, Cursor, DisposeWrapper, type Disposer, DocUtils, type Handler, type IBoolState, type ICast, type ICursor, type IDisposable, type IDisposeWrapper, type IKey, type IKeyboardKey, type IListenable, type IMouseKey, type IObservable, type IPhysicalKey, type IQueue, type IRx, type IStream, Key, type KeyByKeyProps, type Listener as KeyListener, KeysSequence, type Listener$1 as Listener, MouseKey, Observable, PromiseUtils, Queue, Rx, type RxOptions, type ScriptWithDoc, ScrollDirection, ScrollKey, StringUtils, SuchKey, SuchMouseKey, type Timer, type TimerProps, type WhenKeyProps, type WhileAsyncProps, type WhilePredicateProps, type WithDoc, combineDisposers, combineListeners, combineScriptsWithDoc, createTimer, createTimerSequence, force, getHoldKey, getTapKey, getTickByHold, getTickKey, holdKey, inOfAny, runScript, runScripts, stream, tapKey, tickKey, toDisposer, toListener, toggleStateByTap, whileNeed, whileNeedAsync, wrapToScriptWithDoc };
+export { type AnyDoc, BoolState, BoolStateCompose, Cast, Cursor, DisposeWrapper, type Disposer, DocUtils, type EasingFunction, EasingFunctions, type Handler, type IBoolState, type ICast, type ICursor, type IDisposable, type IDisposeWrapper, type IKey, type IKeyboardKey, type IListenable, type IMouseKey, type IObservable, type IPhysicalKey, type IQueue, type IRx, type IStream, Key, type KeyByKeyProps, type Listener as KeyListener, KeysSequence, type Listener$1 as Listener, MouseKey, Observable, PromiseUtils, Queue, Rx, type RxOptions, type ScriptWithDoc, ScrollDirection, ScrollKey, StringUtils, SuchKey, SuchMouseKey, type Timer, type TimerProps, type WhenKeyProps, type WhileAsyncProps, type WhilePredicateProps, type WithDoc, combineDisposers, combineListeners, combineScriptsWithDoc, createTimer, createTimerSequence, force, getHoldKey, getTapKey, getTickByHold, getTickKey, holdKey, inOfAny, runScript, runScripts, stream, tapKey, tickKey, toDisposer, toListener, toggleStateByTap, whileNeed, whileNeedAsync, wrapToScriptWithDoc };

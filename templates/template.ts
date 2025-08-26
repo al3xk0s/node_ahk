@@ -1,4 +1,4 @@
-import { getTickByHold, Key, runScript } from '../dist/index';
+import { getTickByHold, Key, runScript, Cursor, EasingFunctions } from '../dist/index';
 
 const main = () => {
     runScript(

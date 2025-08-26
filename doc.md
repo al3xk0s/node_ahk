@@ -63,6 +63,14 @@
 
 *   `moveTo(position: Partial<CursorPosition>): void`: Перемещает курсор в указанную позицию.
 *   `move(offset: Partial<CursorOffset>): void`: Перемещает курсор относительно текущей позиции.
+*   `moveToEase(props: { position: Partial<CursorPosition> } & CursorEaseProps): Promise<void>`: Плавно перемещает курсор в указанную позицию.
+    *   `props.position`: новая позиция.
+    *   `props.durationMs`: продолжительность движения в миллисекундах.
+    *   `props.easing`: функция сглаживания движения (linear - по-умолчанию).
+*   `moveEase(props: { offset: Partial<CursorOffset> } & CursorEaseProps): Promise<void>`: Плавно перемещает курсор относительно текущей позиции.
+    *   `props.offset`: сдвиг, относительно которого необходимо переместить курсор.
+    *   `props.durationMs`: продолжительность движения в миллисекундах.
+    *   `props.easing`: функция сглаживания движения (linear - по-умолчанию).
 *   `onMove(handler: CursorMoveHandler): Listener`: Регистрирует обработчик, который вызывается при перемещении курсора.
 *   `getPosition(): CursorPosition`: Возвращает текущую позицию курсора.
 
