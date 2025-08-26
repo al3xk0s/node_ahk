@@ -53,7 +53,9 @@
 
 Функция `KeysSequence` позволяет создавать последовательности физических клавиш.
 
-*   `KeysSequence<T extends SuchKey | SuchMouseKey = SuchKey | SuchMouseKey>(keys: IPhysicalKey<T>[]): IPhysicalKeySequence<T>`: Принимает массив `IPhysicalKey` и возвращает `IPhysicalKeySequence`, который также является `IPhysicalKey` и поддерживает все его методы.
+*   `KeysSequence<T extends SuchKey | SuchMouseKey = SuchKey | SuchMouseKey>(keys: IPhysicalKey<T>[]): IPhysicalKeySequence<T>`:
+    * Принимает массив `IPhysicalKey`.
+    * Возвращает `IPhysicalKeySequence`, который также является `IPhysicalKey` и поддерживает все его методы.
 
 ### Курсор
 
@@ -73,20 +75,20 @@
 *   `holdKey({ when, then }: KeyByKeyProps<IPhysicalKey, IPhysicalKey>): Listener`:
     *   `when`: переключает состояние скрипта (активное / неактивное).
     *   `then`: при активном состоянии будет зажата.
-*   `getHoldKey(args_0: KeyByKeyProps<IPhysicalKey<SuchKey | SuchMouseKey>, IPhysicalKey<SuchKey | SuchMouseKey>>): ScriptWithDoc<Listener>`: Версия `holdKey` со встроенной документацией.
+*   `getHoldKey(props: KeyByKeyProps<IPhysicalKey<SuchKey | SuchMouseKey>, IPhysicalKey<SuchKey | SuchMouseKey>>): ScriptWithDoc<Listener>`: Версия `holdKey` со встроенной документацией.
 
 *   `tapKey({ when, then }: KeyByKeyProps<IPhysicalKey, IKey>): Listener`:
     *   `when`: по нажатию на эту клавишу.
     *   `then`: происходит нажатие этой клавиши.
-*   `getTapKey(args_0: KeyByKeyProps<IPhysicalKey<SuchKey | SuchMouseKey>, IKey>): ScriptWithDoc<Listener>`: Версия `tapKey` с документацией.
+*   `getTapKey(props: KeyByKeyProps<IPhysicalKey<SuchKey | SuchMouseKey>, IKey>): ScriptWithDoc<Listener>`: Версия `tapKey` с документацией.
 
 *   `tickKey({ when, then, delayMs, }: TickKeyProps): Listener`:
     *   `when`: переключает состояние скрипта (активное / неактивное).
     *   `then`: при активном состоянии скрипта с определенной периодичностью совершаются нажатия.
     *   `delayMs`: задержка между тиками.
-*   `getTickKey(args_0: TickKeyProps): ScriptWithDoc<Listener>`: Версия `tickKey` с документацией.
+*   `getTickKey(props: TickKeyProps): ScriptWithDoc<Listener>`: Версия `tickKey` с документацией.
 
-*   `getTickByHold(args_0: { then: IKey; } & WhenKeyProps<IPhysicalKey<SuchKey | SuchMouseKey>> & { activate: IPhysicalKey; }): ScriptWithDoc<Listener>`:
+*   `getTickByHold(props: { then: IKey; } & WhenKeyProps<IPhysicalKey<SuchKey | SuchMouseKey>> & { activate: IPhysicalKey; }): ScriptWithDoc<Listener>`:
     *   `activate`: переключает состояние между активным / неактивным.
     *   `when`: в случае активного состояния, при зажатии клавиши происходит многократное нажатие `then`.
     *   Возвращает функцию с документацией.
@@ -103,8 +105,8 @@
 ### Утилиты для скриптов с документацией
 
 *   `ScriptWithDoc<T = Listener>`: Тип, представляющий скрипт с прикрепленной документацией.
-*   `wrapToScriptWithDoc<F extends (...args: Parameters<F>) => ReturnType<F>>(foo: F, { getDoc }: WrapToDocNamedProps<F>): ((...args: Parameters<F>) => ScriptWithDoc<ReturnType<F>>)`: Оборачивает функцию в скрипт с документацией.
-*   `combineScriptsWithDoc(scripts: ScriptWithDoc<void | (() => void) | Listener>[]): (() => Listener) & { doc: string[]; }`: Объединяет несколько скриптов в один скрипт с общей документацией.
+*   `wrapToScriptWithDoc<F ...>(foo: F, { getDoc }: WrapToDocNamedProps<F>): ((...args: Parameters<F>) => ScriptWithDoc<ReturnType<F>>)`: Оборачивает функцию в скрипт с документацией.
+*   `combineScriptsWithDoc(scripts: ScriptWithDoc<...>[]): (() => Listener) & { doc: string[]; }`: Объединяет несколько скриптов в один скрипт с общей документацией.
 *   `runScripts(scripts: ScriptWithDoc<any>[]): void`: Запускает массив скриптов с печатью документации.
 *   `runScript(script: ScriptWithDoc<any>): void`: Запускает один скрипт с печатью документации.
 
