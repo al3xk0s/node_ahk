@@ -1,8 +1,7 @@
-import { MouseEvent, Keyboard, Mouse, KeyboardModifierKeysState } from 'suchibot';
-import { BoolState, IBoolState, IObservable, Observable } from '@node-ahk/shared/rx';
-import { SuchKey, SuchMouseKey, combineListeners, toListener } from '@node-ahk/utils';
+import { MouseEvent, Keyboard, Mouse, KeyboardModifierKeysState, sleep } from 'suchibot';
+import { BoolState, IBoolState } from '@node-ahk/shared/rx';
+import { SuchKey, SuchMouseKey, combineListeners } from '@node-ahk/utils';
 import { Handler, IKey, Listener, _commonKeyExt } from './key';
-import { PromiseUtils } from '@node-ahk/shared';
 
 type KeyType = 'keyboard' | 'mouse';
 
@@ -77,7 +76,7 @@ const _physicalKeyExt = ({
         },
         holdOnTime: async (time) => {
             hold();
-            await PromiseUtils.delayed(time);
+            await sleep(time);
             release();
         }
     }
